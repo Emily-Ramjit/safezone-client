@@ -1,0 +1,26 @@
+import Vue from 'vue'
+import Router from 'vue-router'
+import Home from '@/pages/Home'
+
+Vue.use(Router)
+function getUrlSubdomain (url) {
+  let url1 = url.replace(/(^\w+:|^)\/\//, '')
+  return url1.split('.')[0]
+}
+export default new Router({
+  mode: 'history',
+  routes: [
+    {
+      path: '/',
+      redirect: {
+        name: 'home'
+      }
+    },
+    {
+      path: '/home',
+      name: 'home',
+      component: Home,
+      props: { domain: getUrlSubdomain(window.location.origin) }
+    }
+  ]
+})
