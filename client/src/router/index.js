@@ -1,6 +1,10 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Home from '@/pages/Home'
+import Landing from '../pages/Landing'
+import Statistics from '../pages/Statistics'
+import RecentActivity from '../pages/RecentActivity'
+import Routes from '../pages/Routes'
 
 Vue.use(Router)
 function getUrlSubdomain (url) {
@@ -21,6 +25,26 @@ export default new Router({
       name: 'home',
       component: Home,
       props: { domain: getUrlSubdomain(window.location.origin) }
+    },
+    {
+      path: '/landing',
+      name: 'landing',
+      component: Landing
+    },
+    {
+      path: '/statistics',
+      name: 'statistics',
+      component: Statistics
+    },
+    {
+      path: '/recentactivity',
+      name: 'recentactivity',
+      component: RecentActivity
+    },
+    {
+      path: '/routes',
+      name: 'routes',
+      component: Routes
     }
   ]
 })
