@@ -1,21 +1,14 @@
 # Setup
 
-`git clone 
+`virtualvenv venv`
 
-# Production Setup
+`source venv/bin/activate`
 
-`cd client; npm run build; cd ..`
+`pip install -r requirements.txt`
 
+# To Start server
 
-`pip install -r requirements.py`
+Set Enviroment Variables in .flaskenv
 
-`export FLASK_ENV=production`
-
-`flask run`
-
-# Development Setup
-
-Run Flask Server and Vue.js Dev Server seperately
-
-## Flask
+`flask run` or `python main.py`
 
