@@ -2,39 +2,29 @@
 <page fullWidth>
   <layout>
       <layout-section>
-
-      <row>
-      <div style="width:1270px;">
-        <b-navbar type="light" variant="light">
-          <b-navbar-brand tag="h1" class="mb-0">
-          <img src="../assets/trainstop2.png" class="d-inline-block align-top" alt="BV" width="60" height="40" >
-            <strong> SafeZone </strong>  |
+      <b-row class="mb-2 ml-3">
+      <div style="width:1290px;">
+        <div class="navbar navbar-default navbar-custom">
+          <b-navbar-brand tag="h1" class="mb-0 ml-3">
+            <strong> SafeZone </strong>
           </b-navbar-brand>
-        </b-navbar>
+        </div>
       </div>
-      </row>
+      <sz-sidebar> </sz-sidebar>
 
-      <row>
-      <div v-if="!safestRoute">
-      <b-card class="mb-2" >
-        <b-row class="mb-2">
-          <b-col >
+      <b-card class="mb-2" style="min-width:1070px;">
+        <b-col :cols="8">
+          <div style="padding-bottom:10px;">
             <label for="inputLive">Address</label>
             <b-form-input type="text" :value="'695 Park Ave, New York, NY 10065'" >
             </b-form-input>
-          </b-col>
-        </b-row>
-        </b-card>
-      </div>
-      </row>
+            <i class="fa fa-search"></i>
+            </div>
+        </b-col>
 
-      <row>
-      <div>
-      <b-card class="mb-2" >
-        <b-tabs>
-          <b-tab title="Statistics" active>
-        <b-row class="mb-2">
-          <b-col :cols="9">
+       <b-row>
+         <b-col :cols="8">
+           <div class="ml-4">
             <!-- <label for="inputLive">Address</label>
             <b-form-input type="text" :value="'test'" >
             </b-form-input> -->
@@ -42,7 +32,7 @@
               :center="{lat:40.7679, lng:-73.9639}"
               :zoom="16"
               map-type-id="terrain"
-              style="width: 900px; height: 500px"
+              style="width: 750px; height: 400px"
             >
               <GmapMarker
                 :key="index"
@@ -53,50 +43,23 @@
                 @click="center=m.position"
               />
             </GmapMap>
-
+        </div>
           </b-col>
            <b-col :cols="3">
+             <div class="ml-4">
+              <div style="padding-left:40px;">
              <div style="padding-top:5px;">
              <h5> Stations Nearby </h5>
              </div>
             <resource-list
-            :items="trains">
+            :items="stations">
            </resource-list>
+           </div>
+           </div>
           </b-col>
+                 </b-row>
+         </b-card>
         </b-row>
-          </b-tab>
-          <b-tab title="Recent Activity">
-          </b-tab>
-          <b-tab title="Routes" @click="safestRoute =! safestRoute">
-          <b-card class="mb-2" >
-            <b-row class="mb-2">
-              <b-col >
-                <label for="inputLive">Starting Point</label>
-                <b-form-input type="text" :value="'695 Park Ave, New York, NY 10065'" >
-                </b-form-input>
-              </b-col>
-            </b-row>
-             <b-row class="mb-2">
-              <b-col >
-                <label for="inputLive">Destination</label>
-                <b-form-input type="text" :value="'695 Park Ave, New York, NY 10065'" >
-                </b-form-input>
-              </b-col>
-            </b-row>
-            <b-tabs>
-              <b-tab title="All">
-                 <p> --- some sort of list displaying high risk zones user will be travelling sorted highest to lowest --- </p>
-                </b-tab>
-              <b-tab title="Safest">
-                 <p> --- displays safest route w/ lowest risk zones --- </p>
-                </b-tab>
-            </b-tabs>
-            </b-card>
-          </b-tab>
-        </b-tabs>
-        </b-card>
-      </div>
-      </row>
     </layout-section>
   </layout>
 </page>
@@ -104,7 +67,6 @@
 
 <script>
 import api from '@/api/api'
-import {format} from 'date-fns'
 
 export default {
   mounted () {
@@ -112,7 +74,7 @@ export default {
   },
   data () {
     return {
-      trains: [
+      stations: [
         {
           line: 'F Line',
           stop: 'Lexington Ave. 63',
@@ -132,13 +94,50 @@ export default {
           crimeRate: '< 10%'
         }
       ],
-      safestRoute: false
+      safestRoute: false,
+      longitude: '',
+      latitude: '',
+      filter: []
     }
   },
   methods: {
     fetch () {
-
+      this.getStations()
+    },
+    getStations () {
+      var params = {
+        latitude: this.latitude,
+        longitude: this.longitude,
+        filter: []
+      }
+      api.getNearbyStations(params)
+        .then(res => {
+          this.stations = res.data.map(station => {
+            return {
+              // line: //station.line 'R Line',
+              // stop: //station.stop 'Lexington Ave - 59',
+              // risk: //station.risk 'Low',
+              // crimeRate: //station.crimerate '< 10%'
+            }
+          })
+        })
+        .catch(err => {
+          console.log(err)
+        })
     }
   }
 }
 </script>
+
+<style>
+.navbar-custom {
+    color: #FFFFFF;
+    background-color: #ffc107;
+    height:50px;
+}
+.navbar-brand
+{
+  font-family: 'Lato', sans-serif;
+  font-size: 20px;
+}
+</style>

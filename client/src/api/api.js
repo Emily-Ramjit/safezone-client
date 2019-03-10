@@ -1,11 +1,19 @@
 import axios from 'axios'
 
-axios.defaults.baseURL = 'http://localhost:3000/api'
+axios.defaults.baseURL = 'http://localhost:5000'
 
 export default {
 
-  getRecentCrimeData (address) {
-    return axios.get(`/crime/${address}/images`)
+  getNearbyStations (params) {
+    return axios.get(`/nearby_stations`, { params: params })
+  },
+
+  getNearbyCrimes (params) {
+    return axios.get(`/nearby_crimes`, { params: params })
   }
+
+  // getCoordinates(address){
+  //   return googleSVC.get(`/geocode/json,` { address: address } )
+  // }
 
 }

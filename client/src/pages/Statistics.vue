@@ -1,3 +1,3 @@
-<template> 
+<template>
 <p> statistics </p>
 </template>

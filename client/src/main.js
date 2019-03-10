@@ -12,24 +12,31 @@ import * as fns from 'date-fns'
 import * as _ from 'lodash'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
+import PolarisVue from '@eastsideco/polaris-vue'
+import '@eastsideco/polaris-vue/lib/polaris-vue.css'
 
 // Proprietary Components Import
 import Avatar from 'vue-avatar'
 import SZButton from './components/SZButton'
 import Layout from './components/Layout'
 import LayoutSection from './components/LayoutSection'
-
 import ResourceList from './components/ResourceList.vue'
 import ResourceListItem from './components/ResourceListItem.vue'
-
+import Sidebar from './components/Sidebar.vue'
+import Searchbar from './components/Searchbar.vue'
+import MenuItem from './components/MenuItem.vue'
 import * as VueGoogleMaps from 'vue2-google-maps'
 
 Vue.component('avatar', Avatar)
-Vue.component('szsz-button', SZButton)
+Vue.component('sz-button', SZButton)
 Vue.component('layout-section', LayoutSection)
 Vue.component('layout', Layout)
 Vue.component('resource-list', ResourceList)
 Vue.component('resource-list-item', ResourceListItem)
+Vue.component('sz-sidebar', Sidebar)
+Vue.component('sz-searchbar', Searchbar)
+Vue.component('sz-menu-item', MenuItem)
+
 Vue.component('icon', Icon)
 Vue.use(Vuex)
 Vue.use(BootstrapVue)
@@ -40,6 +47,8 @@ Vue.use(VueGoogleMaps, {
     libraries: 'places'
   }
 })
+Vue.use(PolarisVue)
+
 // Doing this to make it read only
 Object.defineProperty(Vue.prototype, 'fns', { value: fns })
 Object.defineProperty(Vue.prototype, '_', { value: _ })

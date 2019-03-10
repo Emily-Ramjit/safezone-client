@@ -1,3 +1,3 @@
-<template> 
-<p> landing </p> 
+<template>
+<p> landing </p>
 </template>
