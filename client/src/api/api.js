@@ -7,13 +7,11 @@ export default {
   getNearbyStations (params) {
     return axios.get(`/nearby_stations`, { params: params })
   },
-
   getNearbyCrimes (params) {
     return axios.get(`/nearby_crimes`, { params: params })
+  },
+  getCoordinatesByAddress (params) {
+    return axios.get('https://maps.googleapis.com/maps/api/geocode/json', { params: params })
   }
-
-  // getCoordinates(address){
-  //   return googleSVC.get(`/geocode/json,` { address: address } )
-  // }
 
 }

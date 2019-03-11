@@ -47,6 +47,8 @@ Vue.use(VueGoogleMaps, {
     libraries: 'places'
   }
 })
+// google places key -- AIzaSyD5LlWvE-1JFXMOsw0kyLutXObCfJk5ndc
+
 Vue.use(PolarisVue)
 
 // Doing this to make it read only

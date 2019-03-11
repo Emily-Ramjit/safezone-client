@@ -16,8 +16,9 @@
         <b-col :cols="8">
           <div style="padding-bottom:10px;">
             <label for="inputLive">Address</label>
-            <b-form-input type="text" :value="'695 Park Ave, New York, NY 10065'" >
+            <b-form-input type="text" :value="inputAddress" v-model="inputAddress">
             </b-form-input>
+            <sz-button @click.native="getCoordinatesByAddress(inputAddress)"> Search </sz-button>
             <i class="fa fa-search"></i>
             </div>
         </b-col>
@@ -29,7 +30,7 @@
             <b-form-input type="text" :value="'test'" >
             </b-form-input> -->
             <GmapMap
-              :center="{lat:40.7679, lng:-73.9639}"
+              :center="{lat:this.latitude, lng:this.longitude}"
               :zoom="16"
               map-type-id="terrain"
               style="width: 750px; height: 400px"
@@ -95,9 +96,10 @@ export default {
         }
       ],
       safestRoute: false,
-      longitude: '',
-      latitude: '',
-      filter: []
+      longitude: -73.9639,
+      latitude: 40.7679,
+      filter: [],
+      inputAddress: '695 Park Ave, New York, NY 10065'
     }
   },
   methods: {
@@ -123,6 +125,19 @@ export default {
         })
         .catch(err => {
           console.log(err)
+        })
+    },
+    getCoordinatesByAddress (addr) {
+      var params = {
+        address: addr,
+        key: 'AIzaSyD5LlWvE-1JFXMOsw0kyLutXObCfJk5ndc'
+      }
+      api.getCoordinatesByAddress(params)
+        .then(res => {
+          console.log(res)
+          this.longitude = res.data.results[0].geometry.location.lng
+          this.latitude = res.data.results[0].geometry.location.lat
+          console.log(this.longitude, this.latitude)
         })
     }
   }
