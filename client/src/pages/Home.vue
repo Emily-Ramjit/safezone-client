@@ -19,6 +19,7 @@
             <b-form-input type="text" :value="inputAddress" v-model="inputAddress">
             </b-form-input>
             <sz-button @click.native="getCoordinatesByAddress(inputAddress)"> Search </sz-button>
+            <sz-button @click.native="testGeoJson()"> test </sz-button>
             <i class="fa fa-search"></i>
             </div>
         </b-col>
@@ -29,7 +30,7 @@
             <!-- <label for="inputLive">Address</label>
             <b-form-input type="text" :value="'test'" >
             </b-form-input> -->
-            <GmapMap
+            <GmapMap ref="mymap"
               :center="{lat:this.latitude, lng:this.longitude}"
               :zoom="16"
               map-type-id="terrain"
@@ -139,6 +140,12 @@ export default {
           this.latitude = res.data.results[0].geometry.location.lat
           console.log(this.longitude, this.latitude)
         })
+    },
+    testGeoJson() {
+       console.log(this.$refs.mymap.$mapObject.data)
+       this.$refs.mymap.$mapObject.data.loadGeoJson(
+      'https://storage.googleapis.com/mapsdevsite/json/google.json')
+
     }
   }
 }

@@ -2,7 +2,7 @@
 <p> landing </p>
 </template>
 
-<!-- Not designed using Vue, I'm gonna go in and update it  -->
+<!-- 
 
 <!DOCTYPE html>
 <html>
@@ -196,7 +196,7 @@
 			          var url = $('#pac-input').val();
 			          window.location = url;
 			    });
-			</script> -->
+			</script> 
 	    </form>
 	</div>
     
