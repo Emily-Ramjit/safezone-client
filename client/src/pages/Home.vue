@@ -16,11 +16,11 @@
         <b-col :cols="8">
           <div style="padding-bottom:10px;">
             <label for="inputLive">Address</label>
-            <b-form-input type="text" :value="inputAddress" v-model="inputAddress">
+            <b-form-input type="text" :value="inputAddress" v-model="inputAddress" @keydown.enter.native="getCoordinatesByAddress(inputAddress)">
             </b-form-input>
-            <sz-button @click.native="getCoordinatesByAddress(inputAddress)"> Search </sz-button>
-            <sz-button @click.native="testGeoJson()"> test </sz-button>
-            <i class="fa fa-search"></i>
+            <!-- <sz-button @click.native="getCoordinatesByAddress(inputAddress)"> Search </sz-button> -->
+            <!-- <sz-button @click.native="testGeoJson()"> test </sz-button> -->
+            <!-- <i class="fa fa-search"></i> -->
             </div>
         </b-col>
 
@@ -49,7 +49,7 @@
           </b-col>
            <b-col :cols="3">
              <div class="ml-4">
-              <div style="padding-left:40px;">
+              <div style="padding-left:40px;width:260px;">
              <div style="padding-top:5px;">
              <h5> Stations Nearby </h5>
              </div>
@@ -59,7 +59,7 @@
            </div>
            </div>
           </b-col>
-                 </b-row>
+          </b-row>
          </b-card>
         </b-row>
     </layout-section>
@@ -105,22 +105,21 @@ export default {
   },
   methods: {
     fetch () {
-      this.getStations()
+      // this.getStations()
     },
     getStations () {
       var params = {
         latitude: this.latitude,
         longitude: this.longitude,
-        filter: []
+        API_KEY: ''
       }
       api.getNearbyStations(params)
         .then(res => {
+          console.log(res.data)
           this.stations = res.data.map(station => {
             return {
-              // line: //station.line 'R Line',
-              // stop: //station.stop 'Lexington Ave - 59',
-              // risk: //station.risk 'Low',
-              // crimeRate: //station.crimerate '< 10%'
+              // line: //station.lines 'R Line',
+              // stop: //station.name 'Lexington Ave - 59',
             }
           })
         })
@@ -131,7 +130,7 @@ export default {
     getCoordinatesByAddress (addr) {
       var params = {
         address: addr,
-        key: 'AIzaSyD5LlWvE-1JFXMOsw0kyLutXObCfJk5ndc'
+        key: ''
       }
       api.getCoordinatesByAddress(params)
         .then(res => {
@@ -139,13 +138,14 @@ export default {
           this.longitude = res.data.results[0].geometry.location.lng
           this.latitude = res.data.results[0].geometry.location.lat
           console.log(this.longitude, this.latitude)
+        }).then(res => {
+          this.getStations()
         })
     },
-    testGeoJson() {
-       console.log(this.$refs.mymap.$mapObject.data)
-       this.$refs.mymap.$mapObject.data.loadGeoJson(
-      'https://storage.googleapis.com/mapsdevsite/json/google.json')
-
+    testGeoJson () {
+      console.log(this.$refs.mymap.$mapObject.data)
+      this.$refs.mymap.$mapObject.data.loadGeoJson(
+        'https://storage.googleapis.com/mapsdevsite/json/google.json')
     }
   }
 }
