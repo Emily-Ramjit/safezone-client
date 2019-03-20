@@ -72,6 +72,7 @@ import api from '@/api/api'
 
 export default {
   mounted () {
+    this.$router.push({address: ''})
     this.fetch()
   },
   data () {
@@ -106,7 +107,9 @@ export default {
   methods: {
     fetch () {
       this.inputAddress = this.$route.params.address
-      this.getCoordinatesByAddress(this.inputAddress)
+      if (this.inputAddress !== null || this.inputAddress !== undefined) {
+        this.getCoordinatesByAddress(this.inputAddress)
+      }
       // this.getStations()
     },
     getStations () {
