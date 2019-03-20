@@ -11,9 +11,6 @@
   </b-row>
   <sz-button class="float-right" plain> <router-link :to="'recentactivity'">View Crimes</router-link>
  <i class="fas fa-long-arrow-alt-right"></i> </sz-button>
-      <!-- <div>Risk - {{item.risk}}</div>
-      <div>Crime Rate - {{item.crimeRate}}</div> -->
-
     </resource-list-item>
   </div>
 </template>

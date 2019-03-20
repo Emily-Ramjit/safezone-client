@@ -10,7 +10,7 @@
           </b-navbar-brand>
         </div>
       </div>
-      <sz-sidebar> </sz-sidebar>
+      <sz-sidebar :sections="sections"> </sz-sidebar>
 
       <b-card class="mb-2" style="min-width:1070px;" title="Recent Activity" sub-title="6 Line - 68th Street Hunter College">
         <b-col :cols="24">
@@ -54,6 +54,15 @@ export default {
         { Category: 'Assault', Number_of_Occurences: 5, Last_Incident_Date: '3/20/2019' },
         { Category: 'Murder', Number_of_Occurences: 1, Last_Incident_Date: '3/20/2019' },
         { Category: 'Robbery', Number_of_Occurences: 3, Last_Incident_Date: '3/20/2019' }
+      ],
+      sections: [
+        {
+          title: 'Recent Activity',
+          items: [
+            {content: 'Home', url: '/home'},
+            {content: 'Routes', url: '/routes'}
+          ]
+        }
       ]
     }
   }

@@ -16,7 +16,7 @@ export default {
         {
           title: 'Home',
           items: [
-            {content: 'Statistics', url: '/home'},
+            // {content: 'Home', url: '/landing'},
             {content: 'Recent Activity', url: '/recentactivity'},
             {content: 'Routes', url: '/routes'}
           ]

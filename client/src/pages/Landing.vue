@@ -4,10 +4,9 @@
     <b-navbar-brand href="#"> SafeZone </b-navbar-brand>
     <b-collapse is-nav id="nav_collapse">
       <b-navbar-nav>
-        <b-nav-item href="#" active>Home</b-nav-item>
-        <b-nav-item href="#">Statistics</b-nav-item>
-        <b-nav-item href="#">Recent Activity</b-nav-item>
-        <b-nav-item href="#">Routes</b-nav-item>
+        <b-nav-item href="home">Home</b-nav-item>
+        <b-nav-item href="recentactivity">Recent Activity</b-nav-item>
+        <b-nav-item href="routes">Routes</b-nav-item>
       </b-navbar-nav>
     </b-collapse>
   </b-navbar>
@@ -24,9 +23,10 @@
         placeholder="Where are you headed?"
         class="search-location"
         onfocus="value = ''"
+        v-model="searchValue"
         type="text" />
         <div id=buttonGo class="col-2 col-md-1">
-          <button type="submit" class="btn btn-block btn-lg btn-primary">Go!</button>
+          <sz-button primary :size='"lg"' @click.native="handleClick(searchValue)">Go!</sz-button>
         </div>
 </div>
 
@@ -73,7 +73,7 @@
   font-size: 20px;
   font-weight: 400;
   outline: none;
-  height: 30px;
+  height: 35px;
   line-height: 30px;
   text-align: center;
   border-radius: 10px;
@@ -89,6 +89,17 @@ export default {
       (this.$refs.autocomplete),
       {types: ['geocode']}
     )
+  },
+  data () {
+    return {
+      searchValue: ''
+    }
+  },
+  methods: {
+    handleClick(search) {
+      console.log(search)
+      this.$router.push({name: 'home', params: { address: search}});
+    }
   }
 }
 </script>

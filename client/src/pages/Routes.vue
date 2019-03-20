@@ -38,13 +38,29 @@
 
      </b-row>
 
-      <sz-sidebar> </sz-sidebar>
+      <sz-sidebar :sections="sections"> </sz-sidebar>
     </layout-section>
   </layout>
 </page>
 </template>
 
 <script>
+export default {
+  data () {
+    return {
+      sections: [
+        {
+          title: 'Routes',
+          items: [
+            {content: 'Home', url: '/home'},
+            {content: 'Recent Activity', url: '/recentactivity'}
+          ]
+        }
+      ]
+    }
+  }
+}
+
 </script>
 <style>
 .navbar-custom {

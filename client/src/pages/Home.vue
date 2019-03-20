@@ -105,6 +105,8 @@ export default {
   },
   methods: {
     fetch () {
+      this.inputAddress = this.$route.params.address
+      this.getCoordinatesByAddress(this.inputAddress)
       // this.getStations()
     },
     getStations () {

@@ -21,15 +21,15 @@ export default new Router({
       }
     },
     {
-      path: '/home',
+      path: '/home/:address',
       name: 'home',
-      component: Home,
-      props: { domain: getUrlSubdomain(window.location.origin) }
+      component: Home
     },
     {
       path: '/landing',
       name: 'landing',
-      component: Landing
+      component: Landing,
+      props: { domain: getUrlSubdomain(window.location.origin) }
     },
     {
       path: '/statistics',
