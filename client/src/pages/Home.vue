@@ -81,20 +81,14 @@ export default {
         {
           line: 'F Line',
           stop: 'Lexington Ave. 63',
-          risk: 'Low',
-          crimeRate: '< 10%'
         },
         {
           line: '6 Line',
           stop: 'Hunter College - 68th Ave',
-          risk: 'Low',
-          crimeRate: '< 10%'
         },
         {
           line: 'R Line',
-          stop: 'Lexington Ave - 59',
-          risk: 'Low',
-          crimeRate: '< 10%'
+          stop: 'Lexington Ave - 59'
         }
       ],
       safestRoute: false,
@@ -123,8 +117,8 @@ export default {
           console.log(res.data)
           this.stations = res.data.map(station => {
             return {
-              // line: //station.lines 'R Line',
-              // stop: //station.name 'Lexington Ave - 59',
+               line: station.lines, 
+               stop: station.name 
             }
           })
         })
