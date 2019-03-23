@@ -42,7 +42,7 @@ export default new Router({
       component: Statistics
     },
     {
-      path: '/recentactivity',
+      path: '/recentactivity/:station/:latitude/:longitude',
       name: 'recentactivity',
       component: RecentActivity
     },

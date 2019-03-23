@@ -5,8 +5,7 @@ import Vuex from 'vuex'
 // import App from './App'
 // Third party
 import BootstrapVue from 'bootstrap-vue'
-import 'vue-awesome/icons'
-import Icon from 'vue-awesome/components/Icon'
+
 import PortalVue from 'portal-vue'
 import * as fns from 'date-fns'
 import * as _ from 'lodash'
@@ -37,7 +36,6 @@ Vue.component('sz-sidebar', Sidebar)
 Vue.component('sz-searchbar', Searchbar)
 Vue.component('sz-menu-item', MenuItem)
 
-Vue.component('icon', Icon)
 Vue.use(Vuex)
 Vue.use(BootstrapVue)
 Vue.use(PortalVue)

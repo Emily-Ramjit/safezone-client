@@ -2,7 +2,7 @@
 <page fullWidth>
   <layout>
       <layout-section>
-      <b-row class="mb-2 ml-3">
+      <b-row class="ml-3">
       <div style="width:1290px;">
         <div class="navbar navbar-default navbar-custom">
           <b-navbar-brand tag="h1" class="mb-0 ml-3">
@@ -10,31 +10,26 @@
           </b-navbar-brand>
         </div>
       </div>
+      </b-row>
+      <b-row class="mb-2 ml-3">
       <sz-sidebar> </sz-sidebar>
 
       <b-card class="mb-2" style="min-width:1070px;">
-        <b-col :cols="8">
+        <b-col :cols="10">
           <div style="padding-bottom:10px;">
-            <label for="inputLive">Address</label>
-            <b-form-input type="text" :value="inputAddress" v-model="inputAddress" @keydown.enter.native="getCoordinatesByAddress(inputAddress)">
+            <b-form-input type="text" :value="inputAddress" v-model="inputAddress" :placeholder="'Type in an address...'" @keydown.enter.native="getCoordinatesByAddress(inputAddress)">
             </b-form-input>
-            <!-- <sz-button @click.native="getCoordinatesByAddress(inputAddress)"> Search </sz-button> -->
-            <!-- <sz-button @click.native="testGeoJson()"> test </sz-button> -->
-            <!-- <i class="fa fa-search"></i> -->
             </div>
         </b-col>
 
        <b-row>
          <b-col :cols="8">
            <div class="ml-4">
-            <!-- <label for="inputLive">Address</label>
-            <b-form-input type="text" :value="'test'" >
-            </b-form-input> -->
             <GmapMap ref="mymap"
               :center="{lat:this.latitude, lng:this.longitude}"
               :zoom="16"
               map-type-id="terrain"
-              style="width: 750px; height: 400px"
+              style="width: 118%; height: 350px"
             >
               <GmapMarker
                 :key="index"
@@ -49,7 +44,7 @@
           </b-col>
            <b-col :cols="3">
              <div class="ml-4">
-              <div style="padding-left:40px;width:260px;">
+              <div style="padding-left:90px;width:300px;">
              <div style="padding-top:5px;">
              <h5> Stations Nearby </h5>
              </div>
@@ -60,6 +55,39 @@
            </div>
           </b-col>
           </b-row>
+
+              <div>
+            <b-row class="ml-3 mt-2" style="width:100%;">
+                <div class="col-sm-3">
+                  <b-card style="height:100px; border-top: 3px solid purple;" >
+                 <div class="infocard-header">
+                  Crime Rate Percentage (YTD)
+                  </div>
+                 </b-card>
+                </div>
+                <div class="col-sm-3">
+                <b-card  style="height:100px;border-top: 3px solid red;" >
+                  <div class="infocard-header">
+                  Overall Risk
+                 </div>
+                 </b-card>
+                </div>
+                <div class="col-sm-3">
+                  <b-card  style="height:100px; border-top: 3px solid purple;" >
+                      <div class="infocard-header">
+                  Top Crime Categories
+                      </div>
+                  </b-card>
+                  </div>
+                <div class="col-sm-3">
+                  <b-card  style="height:100px; border-top: 3px solid red;" >
+                  <div class="infocard-header">
+                  Highest Crime Station
+                   </div>
+                  </b-card>
+                 </div>
+              </b-row>
+            </div>
          </b-card>
         </b-row>
     </layout-section>
@@ -68,6 +96,7 @@
 </template>
 
 <script>
+/* eslint-disable */
 import api from '@/api/api'
 
 export default {
@@ -81,14 +110,20 @@ export default {
         {
           line: 'F Line',
           stop: 'Lexington Ave. 63',
+          longitude: -73.9639,
+          latitude: 40.7679
         },
         {
           line: '6 Line',
           stop: 'Hunter College - 68th Ave',
+          longitude: -73.9639,
+          latitude: 40.7679
         },
         {
           line: 'R Line',
-          stop: 'Lexington Ave - 59'
+          stop: 'Lexington Ave - 59',
+          longitude: -73.9639,
+          latitude: 40.7679
         }
       ],
       safestRoute: false,
@@ -118,9 +153,13 @@ export default {
           this.stations = res.data.map(station => {
             return {
                line: station.lines, 
-               stop: station.name 
+               stop: station.name, 
+               longitude: station.longitude,
+               latitude: station.latitude
             }
           })
+        }).then(res => {
+          this.addGeoJson()
         })
         .catch(err => {
           console.log(err)
@@ -141,10 +180,25 @@ export default {
           this.getStations()
         })
     },
-    testGeoJson () {
-      console.log(this.$refs.mymap.$mapObject.data)
-      this.$refs.mymap.$mapObject.data.loadGeoJson(
-        'https://storage.googleapis.com/mapsdevsite/json/google.json')
+    // testGeoJson () {
+    //   console.log(this.$refs.mymap.$mapObject.data)
+    //   this.$refs.mymap.$mapObject.data.loadGeoJson(
+    //     'https://storage.googleapis.com/mapsdevsite/json/google.json')
+    // }
+    addGeoJson () {
+      var geoJsonArray = []
+      
+      this.stations.forEach(function(station) {
+        geoJsonArray.push(
+          {
+            type: 'Feature',
+            geometry: {
+              type: 'Point',
+              coordinates: [station.longitude, station.latitude]
+            }
+          })
+        });
+      this.$refs.mymap.$mapObject.data.addGeoJson(geoJsonArray)
     }
   }
 }
@@ -158,7 +212,12 @@ export default {
 }
 .navbar-brand
 {
-  font-family: 'Lato', sans-serif;
+  font-family:  sans-serif;
   font-size: 20px;
+}
+
+.infocard-header {
+  font-family:  sans-serif;
+  font-size: 13px;
 }
 </style>

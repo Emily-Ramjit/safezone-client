@@ -10,6 +10,7 @@ export default {
     return axios.get(`https://api-dot-united-triode-233023.appspot.com/api/stations/nearby`, { params: params })
   },
   getNearbyCrimes (params) {
+    params.API_KEY = '4c4fdb68-49d7-11e9-8928-88e9fe70a0a1'
     return axios.get(`https://api-dot-united-triode-233023.appspot.com/api/crimes/nearby`, { params: params })
   },
   getCoordinatesByAddress (params) {

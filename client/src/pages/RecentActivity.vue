@@ -12,9 +12,12 @@
       </div>
       <sz-sidebar :sections="sections"> </sz-sidebar>
 
-      <b-card class="mb-2" style="min-width:1070px;" title="Recent Activity" sub-title="6 Line - 68th Street Hunter College">
+      <b-card class="mb-2" style="min-width:1070px;" title="Recent Activity" :sub-title="page.subTitle">
         <b-col :cols="24">
-          <div style="padding-bottom:10px; width:900px;">
+           <div class= "float-right pb-2">
+           <b-form-select @change="updateFrequency($event)" v-model="selected" :options="options" />
+        </div>
+          <div style="padding-bottom:10px; width:100%;">
             <div>
                 <b-table striped hover :items="items" :fields="fields" />
               </div>
@@ -28,8 +31,15 @@
 </template>
 
 <script>
+/* eslint-disable */
+import api from '@/api/api'
 
 export default {
+  mounted () {
+    console.log(this.$route.params.station )
+    this.page.subTitle = this.$route.params.station 
+    this.fetch()
+  },
   data () {
     return {
       fields: {
@@ -38,22 +48,22 @@ export default {
           label: 'Category',
           sortable: true
         },
-        Number_of_Occurences: {
-          key: 'Number_of_Occurences',
-          label: 'Number of Occurences',
+        Description: {
+          key: 'Description',
+          label: 'Description',
           sortable: true
         },
-        Last_Incident_Date: {
-          key: 'Last_Incident_Date',
-          label: 'Last Incident Date',
+        Date: {
+          key: 'Date',
+          label: 'Incident Date',
           sortable: true
         }
       },
       items: [
-        { Category: 'Rape', Number_of_Occurences: 3, Last_Incident_Date: '3/20/2019' },
-        { Category: 'Assault', Number_of_Occurences: 5, Last_Incident_Date: '3/20/2019' },
-        { Category: 'Murder', Number_of_Occurences: 1, Last_Incident_Date: '3/20/2019' },
-        { Category: 'Robbery', Number_of_Occurences: 3, Last_Incident_Date: '3/20/2019' }
+        { Category: 'Rape', Number_of_Occurences: 3, Date: '3/20/2019' },
+        { Category: 'Assault', Number_of_Occurences: 5, Date: '3/20/2019' },
+        { Category: 'Murder', Number_of_Occurences: 1, Date: '3/20/2019' },
+        { Category: 'Robbery', Number_of_Occurences: 3, Date: '3/20/2019' }
       ],
       sections: [
         {
@@ -63,7 +73,47 @@ export default {
             {content: 'Routes', url: '/routes'}
           ]
         }
-      ]
+      ],
+      page: {
+        subTitle: this.$route.params.station
+      },
+      selected: 'year',
+        options: [
+          { value: null, text: 'Please select a frequency' },
+          { value: 'week', text: 'Weekly' },
+          { value: 'month', text: 'Monthly' },
+          { value: 'year', text: 'Yearly' }
+        ]
+    }
+  },
+  methods: {
+    fetch () {
+      this.getCrimes()
+    },
+    getCrimes () {
+      var params = {
+        latitude: this.$route.params.latitude,
+        longitude: this.$route.params.longitude,
+        API_KEY: '',
+        timeSpan: this.selected
+      }
+      console.log(params)
+      api.getNearbyCrimes(params)
+        .then(res => {
+          console.log(res.data)
+          this.items = res.data.map(crime => {
+            return {
+               Category: crime.category, 
+               Description: crime.crime_desc, 
+               Date: crime.date
+            }
+          })
+        })
+    },
+    updateFrequency ($event) {
+      console.log($event)
+      this.selected = $event
+      this.getCrimes()
     }
   }
 }
@@ -72,7 +122,7 @@ export default {
 <style>
 .navbar-custom {
     color: #FFFFFF;
-    background-color: #ffc107;
+    background-color: #e4a51e;
     height:50px;
 }
 .navbar-brand
