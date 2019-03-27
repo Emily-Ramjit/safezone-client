@@ -56,16 +56,19 @@
           </b-col>
           </b-row>
 
-              <!-- <div>
+              <div>
             <b-row class="ml-3 mt-2" style="width:100%;">
-                <div class="col-sm-3">
+                <div class="col-sm-4">
                   <b-card style="height:100px; border-top: 3px solid purple;" >
                  <div class="infocard-header">
-                  Crime Rate Percentage (YTD)
+                  Total Crimes (YTD)
+                  <div class="totalCrimes">
+                  {{totalCrimes}}
+                  </div>
                   </div>
                  </b-card>
                 </div>
-                <div class="col-sm-3">
+                <!-- <div class="col-sm-3">
                 <b-card  style="height:100px;border-top: 3px solid red;" >
                   <div class="infocard-header">
                   Overall Risk
@@ -78,16 +81,19 @@
                   Top Crime Categories
                       </div>
                   </b-card>
-                  </div>
-                <div class="col-sm-3">
+                  </div> -->
+                <div class="col-sm-4">
                   <b-card  style="height:100px; border-top: 3px solid red;" >
                   <div class="infocard-header">
                   Highest Crime Station
+                  <div class="highestCrimeStation">
+                  {{highestCrimeStation}} ( {{ maxCrimes }} )
+                  </div>
                    </div>
                   </b-card>
                  </div>
               </b-row>
-            </div> -->
+            </div>
          </b-card>
         </b-row>
     </layout-section>
@@ -132,7 +138,9 @@ export default {
       filter: [],
       inputAddress: '695 Park Ave, New York, NY 10065',
       highestCrimeStation: '',
-      topCrimeCategories: []
+      maxCrimes: 0,
+      crimeTypes: [],
+      totalCrimes: 0
     }
   },
   methods: {
@@ -166,6 +174,8 @@ export default {
                latitude: station.latitude
             }
           })
+        }).then(res => {
+          this.getCrimes()
         })
         .catch(err => {
           console.log(err)
@@ -186,26 +196,28 @@ export default {
           this.getStations()
         })
     },
-    // testGeoJson () {
-    //   console.log(this.$refs.mymap.$mapObject.data)
-    //   this.$refs.mymap.$mapObject.data.loadGeoJson(
-    //     'https://storage.googleapis.com/mapsdevsite/json/google.json')
-    // }
-    // addGeoJson () {
-    //   var geoJsonArray = []
-      
-    //   this.stations.forEach(function(station) {
-    //     geoJsonArray.push(
-    //       {
-    //         type: 'Feature',
-    //         geometry: {
-    //           type: 'Point',
-    //           coordinates: [station.longitude, station.latitude]
-    //         }
-    //       })
-    //     });
-    //   this.$refs.mymap.$mapObject.data.addGeoJson(geoJsonArray)
-    // }
+    getCrimes() {
+      this.totalCrimes = 0
+      this.maxCrimes = 0
+      this.stations.forEach(station => {
+        var params = {
+          latitude: station.latitude,
+          longitude: station.longitude,
+          API_KEY: '',
+          timeSpan: 'year'
+        }
+        api.getNearbyCrimes(params)
+          .then(res => {
+            console.log(res.data.results)
+            this.totalCrimes = this.totalCrimes + res.data.results.length;
+            if(res.data.results.length > this.maxCrimes) {
+              this.maxCrimes = res.data.results.length
+              this.highestCrimeStation = station.line + station.stop
+            }
+            this.crimeTypes.push(res.data.frequencies)
+          })
+      })
+    }
   }
 }
 </script>
@@ -224,6 +236,20 @@ export default {
 
 .infocard-header {
   font-family:  sans-serif;
-  font-size: 13px;
+  font-size: 16px;
+  padding-left: 15px;
+}
+
+.totalCrimes {
+  font-size:40px;
+  padding-top:14px;
+  color:purple;
+  position:absolute;
+}
+.highestCrimeStation {
+  font-size:20px;
+  padding-top:14px;
+  position:absolute;
+  color:red;
 }
 </style>

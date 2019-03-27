@@ -1,7 +1,7 @@
 <template>
   <div class="list-group mb-2">
     <slot/><!-- slot for future search?-->
-    <resource-list-item v-for="(item, i) in items" :key="i"
+    <resource-list-item v-for="(item, i) in items.slice(0, 6)" :key="i"
       :shortcutActions="item.shortcutActions"
       :persistentActions="true"
     >
