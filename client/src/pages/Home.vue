@@ -56,7 +56,7 @@
           </b-col>
           </b-row>
 
-              <div>
+              <!-- <div>
             <b-row class="ml-3 mt-2" style="width:100%;">
                 <div class="col-sm-3">
                   <b-card style="height:100px; border-top: 3px solid purple;" >
@@ -87,7 +87,7 @@
                   </b-card>
                  </div>
               </b-row>
-            </div>
+            </div> -->
          </b-card>
         </b-row>
     </layout-section>
@@ -108,19 +108,19 @@ export default {
     return {
       stations: [
         {
-          line: 'F Line',
+          line: 'F',
           stop: 'Lexington Ave. 63',
           longitude: -73.9639,
           latitude: 40.7679
         },
         {
-          line: '6 Line',
+          line: '6',
           stop: 'Hunter College - 68th Ave',
           longitude: -73.9639,
           latitude: 40.7679
         },
         {
-          line: 'R Line',
+          line: 'R',
           stop: 'Lexington Ave - 59',
           longitude: -73.9639,
           latitude: 40.7679
@@ -130,7 +130,9 @@ export default {
       longitude: -73.9639,
       latitude: 40.7679,
       filter: [],
-      inputAddress: '695 Park Ave, New York, NY 10065'
+      inputAddress: '695 Park Ave, New York, NY 10065',
+      highestCrimeStation: '',
+      topCrimeCategories: []
     }
   },
   methods: {
@@ -138,8 +140,9 @@ export default {
       this.inputAddress = this.$route.params.address
       if (this.inputAddress !== null || this.inputAddress !== undefined) {
         this.getCoordinatesByAddress(this.inputAddress)
+      } else {
+        this.getCoordinatesByAddress('695 Park Ave, New York, NY 10065')
       }
-      // this.getStations()
     },
     getStations () {
       var params = {
@@ -148,18 +151,21 @@ export default {
         API_KEY: ''
       }
       api.getNearbyStations(params)
-        .then(res => {
+        .then(res => {  
           console.log(res.data)
           this.stations = res.data.map(station => {
+            var lines = ''
+            for(var i = 0; i < station.lines.length; i++){
+              lines = lines + station.lines[i] + "," 
+            }
+            station.lines = lines
             return {
-               line: station.lines, 
+               line: station.lines,
                stop: station.name, 
                longitude: station.longitude,
                latitude: station.latitude
             }
           })
-        }).then(res => {
-          this.addGeoJson()
         })
         .catch(err => {
           console.log(err)
@@ -185,21 +191,21 @@ export default {
     //   this.$refs.mymap.$mapObject.data.loadGeoJson(
     //     'https://storage.googleapis.com/mapsdevsite/json/google.json')
     // }
-    addGeoJson () {
-      var geoJsonArray = []
+    // addGeoJson () {
+    //   var geoJsonArray = []
       
-      this.stations.forEach(function(station) {
-        geoJsonArray.push(
-          {
-            type: 'Feature',
-            geometry: {
-              type: 'Point',
-              coordinates: [station.longitude, station.latitude]
-            }
-          })
-        });
-      this.$refs.mymap.$mapObject.data.addGeoJson(geoJsonArray)
-    }
+    //   this.stations.forEach(function(station) {
+    //     geoJsonArray.push(
+    //       {
+    //         type: 'Feature',
+    //         geometry: {
+    //           type: 'Point',
+    //           coordinates: [station.longitude, station.latitude]
+    //         }
+    //       })
+    //     });
+    //   this.$refs.mymap.$mapObject.data.addGeoJson(geoJsonArray)
+    // }
   }
 }
 </script>

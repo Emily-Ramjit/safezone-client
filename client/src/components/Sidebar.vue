@@ -18,8 +18,8 @@ export default {
           title: 'Home',
           items: [
             // {content: 'Home', url: '/landing'},
-            {content: 'Recent Activity', url: '/recentactivity',  icon: 'fas fa-home'},
-            {content: 'Routes', url: '/routes'}
+            // {content: 'Recent Activity', url: '/recentactivity',  icon: 'fas fa-home'},
+            // {content: 'Routes', url: '/routes'}
           ]
         }
       ]

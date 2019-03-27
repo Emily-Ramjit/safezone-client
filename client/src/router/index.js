@@ -47,6 +47,11 @@ export default new Router({
       component: RecentActivity
     },
     {
+      path: '/recentactivity/',
+      name: 'recentactivity',
+      component: RecentActivity
+    },
+    {
       path: '/routes',
       name: 'routes',
       component: Routes

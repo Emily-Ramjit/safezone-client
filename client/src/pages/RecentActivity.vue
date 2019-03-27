@@ -69,8 +69,8 @@ export default {
         {
           title: 'Recent Activity',
           items: [
-            {content: 'Home', url: '/home'},
-            {content: 'Routes', url: '/routes'}
+            {content: 'Home', url: '/home'}
+            // {content: 'Routes', url: '/routes'}
           ]
         }
       ],
@@ -82,7 +82,10 @@ export default {
           { value: null, text: 'Please select a frequency' },
           { value: 'week', text: 'Weekly' },
           { value: 'month', text: 'Monthly' },
-          { value: 'year', text: 'Yearly' }
+          { value: 'year', text: 'Yearly' },
+          { value: '3 month', text: 'Last 3 Months'},
+          { value: '6 month', text: 'Last 6 Months'},
+          { value: '9 month', text: 'Last 9 Months'}
         ]
     }
   },
@@ -101,10 +104,10 @@ export default {
       api.getNearbyCrimes(params)
         .then(res => {
           console.log(res.data)
-          this.items = res.data.map(crime => {
+          this.items = res.data.results.map(crime => {
             return {
                Category: crime.category, 
-               Description: crime.crime_desc, 
+               Description: crime.pd_desc, 
                Date: crime.date
             }
           })

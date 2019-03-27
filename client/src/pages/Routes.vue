@@ -53,7 +53,7 @@ export default {
           title: 'Routes',
           items: [
             {content: 'Home', url: '/home'},
-            {content: 'Recent Activity', url: '/recentactivity'}
+            // {content: 'Recent Activity', url: '/recentactivity'}
           ]
         }
       ]

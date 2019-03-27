@@ -5,8 +5,8 @@
     <b-collapse is-nav id="nav_collapse">
       <b-navbar-nav>
         <b-nav-item href="home">Home</b-nav-item>
-        <b-nav-item href="recentactivity">Recent Activity</b-nav-item>
-        <b-nav-item href="routes">Routes</b-nav-item>
+        <!-- <b-nav-item href="recentactivity">Recent Activity</b-nav-item> -->
+        <!-- <b-nav-item href="routes">Routes</b-nav-item> -->
       </b-navbar-nav>
     </b-collapse>
   </b-navbar>
@@ -20,7 +20,7 @@
 
 <div id="app">
     <input ref="autocomplete"
-        placeholder="Where are you headed?"
+        placeholder="Search by address..."
         class="search-location"
         onfocus="value = ''"
         v-model="searchValue"
