@@ -7,7 +7,8 @@
     >
 
   <b-row style="padding-left:10px;">
-      <h5> {{item.line}} - </h5> <div style="padding-left:5px"> {{item.stop}} </div>
+      <div style="padding-left:5px font-size: 10px; font-weight: 200;"> 
+            <b>{{item.line}}</b>  {{item.stop}} </div>
   </b-row>
   <sz-button class="float-right" plain @click.native="setRoute(item.latitude, item.longitude, item.line, item.stop)"> View Crimes
  <i class="fas fa-long-arrow-alt-right"></i> </sz-button>

@@ -16,6 +16,9 @@
 
       <b-card class="mb-2" style="min-width:1070px;">
         <b-col :cols="10">
+           <div style="font-size: 25px; font-weight: 200;"> Statistics 
+               <hr class="my-4" />
+           </div>
           <div style="padding-bottom:10px;">
             <b-form-input type="text" :value="inputAddress" v-model="inputAddress" :placeholder="'Type in an address...'" @keydown.enter.native="getCoordinatesByAddress(inputAddress)">
             </b-form-input>
@@ -45,8 +48,8 @@
            <b-col :cols="3">
              <div class="ml-4">
               <div style="padding-left:90px;width:300px;">
-             <div style="padding-top:5px;">
-             <h5> Stations Nearby </h5>
+             <div style="padding-top:1px;font-size: 18px; font-weight: 200;" >
+              Stations Nearby 
              </div>
             <resource-list
             :items="stations">
@@ -230,18 +233,18 @@ export default {
 }
 .navbar-brand
 {
-  font-family:  sans-serif;
+  font-weight: 200;
   font-size: 20px;
 }
 
 .infocard-header {
-  font-family:  sans-serif;
   font-size: 16px;
   padding-left: 15px;
+  font-weight: 200;
 }
 
 .totalCrimes {
-  font-size:40px;
+  font-size:35px;
   padding-top:14px;
   color:purple;
   position:absolute;
