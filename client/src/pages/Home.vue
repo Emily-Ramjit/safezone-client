@@ -1,9 +1,8 @@
 <template>
-<page fullWidth>
-  <layout>
-      <layout-section>
-      <b-row class="ml-3">
-      <div style="width:1290px;">
+<div id=home>
+
+      <b-row class="ml-0">
+      <div style="width:100%; height:100%;">
         <div class="navbar navbar-default navbar-custom">
           <b-navbar-brand tag="h1" class="mb-0 ml-3">
             <strong> SafeZone </strong>
@@ -11,10 +10,10 @@
         </div>
       </div>
       </b-row>
-      <b-row class="mb-2 ml-3">
+      <b-row class="mb-2 ml-0">
       <sz-sidebar> </sz-sidebar>
 
-      <b-card class="mb-2" style="min-width:1070px;">
+      <b-card class="mb-2" style="width:85%; height:200%;">
         <b-col :cols="10">
            <div style="font-size: 25px; font-weight: 200;"> Statistics 
                <hr class="my-4" />
@@ -45,9 +44,9 @@
             </GmapMap>
         </div>
           </b-col>
-           <b-col :cols="3">
+           <b-col :cols="4">
              <div class="ml-4">
-              <div style="padding-left:90px;width:300px;">
+              <div style="padding-left: 160px; width: 88%;">
              <div style="padding-top:1px;font-size: 18px; font-weight: 200;" >
               Stations Nearby 
              </div>
@@ -99,9 +98,7 @@
             </div>
          </b-card>
         </b-row>
-    </layout-section>
-  </layout>
-</page>
+</div>
 </template>
 
 <script>

@@ -1,9 +1,7 @@
 <template>
-<page fullWidth>
-  <layout>
-      <layout-section>
-      <b-row class="mb-2 ml-3">
-      <div style="width:1290px;">
+<div id=recentactivity>
+      <b-row class="mb-2 ml-0">
+      <div style="width:100%;">
         <div class="navbar navbar-default navbar-custom">
           <b-navbar-brand tag="h1" class="mb-0 ml-3">
             <strong> SafeZone </strong>
@@ -12,7 +10,7 @@
       </div>
       <sz-sidebar :sections="sections"> </sz-sidebar>
 
-      <b-card class="mb-2" style="min-width:1070px;" title="Recent Activity" :sub-title="page.subTitle">
+      <b-card class="mb-2" style="width:85%; height:200%;" title="Recent Activity" :sub-title="page.subTitle">
         <b-col :cols="24">
            <div class= "float-right pb-2">
            <b-form-select @change="updateFrequency($event)" v-model="selected" :options="options" />
@@ -25,9 +23,7 @@
         </b-col>
          </b-card>
         </b-row>
-    </layout-section>
-  </layout>
-</page>
+        </div>
 </template>
 
 <script>
