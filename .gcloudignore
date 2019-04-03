@@ -1,0 +1,7 @@
+.git
+.gitignore
+/client/*
+
+!/client/
+!/client/dist/**
+node_modules
