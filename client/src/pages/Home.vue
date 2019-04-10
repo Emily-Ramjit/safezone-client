@@ -14,15 +14,56 @@
       <sz-sidebar> </sz-sidebar>
 
       <b-card class="mb-2" style="width:85%; height:200%;">
+        
         <b-col :cols="10">
            <div style="font-size: 25px; font-weight: 200;"> Statistics 
                <hr class="my-4" />
            </div>
-          <div style="padding-bottom:10px;">
+           <div>
+            <b-row class="mt-2 pb-3" style="width:100%;">
+                <div class="col-sm-4">
+                  <b-card style="height:100px; border-top: 3px solid purple;" >
+                 <div class="infocard-header">
+                  Total Crimes (YTD)
+                  <div class="totalCrimes">
+                  {{totalCrimes}}
+                  </div>
+                  </div>
+                 </b-card>
+                </div>
+                <!-- <div class="col-sm-3">
+                <b-card  style="height:100px;border-top: 3px solid red;" >
+                  <div class="infocard-header">
+                  Overall Risk
+                 </div>
+                 </b-card>
+                </div>
+                <div class="col-sm-3">
+                  <b-card  style="height:100px; border-top: 3px solid purple;" >
+                      <div class="infocard-header">
+                  Top Crime Categories
+                      </div>
+                  </b-card>
+                  </div> -->
+                <div class="col-sm-4">
+                  <b-card  style="height:100px; border-top: 3px solid red;" >
+                  <div class="infocard-header">
+                  Highest Crime Station
+                  <div class="highestCrimeStation">
+                  {{highestCrimeStation}} ( {{ maxCrimes }} )
+                  </div>
+                   </div>
+                  </b-card>
+                 </div>
+              </b-row>
+            </div>
+
+          <div style="padding-bottom:10px; width:90%;">
             <b-form-input type="text" :value="inputAddress" v-model="inputAddress" :placeholder="'Type in an address...'" @keydown.enter.native="getCoordinatesByAddress(inputAddress)">
             </b-form-input>
             </div>
         </b-col>
+
 
        <b-row>
          <b-col :cols="8">
@@ -74,45 +115,27 @@
           </b-col>
           
           </b-row>
-
-              <div>
-            <b-row class="ml-3 mt-2" style="width:100%;">
-                <div class="col-sm-4">
-                  <b-card style="height:100px; border-top: 3px solid purple;" >
-                 <div class="infocard-header">
-                  Total Crimes (YTD)
-                  <div class="totalCrimes">
-                  {{totalCrimes}}
-                  </div>
-                  </div>
-                 </b-card>
-                </div>
-                <!-- <div class="col-sm-3">
-                <b-card  style="height:100px;border-top: 3px solid red;" >
-                  <div class="infocard-header">
-                  Overall Risk
-                 </div>
-                 </b-card>
-                </div>
-                <div class="col-sm-3">
-                  <b-card  style="height:100px; border-top: 3px solid purple;" >
-                      <div class="infocard-header">
-                  Top Crime Categories
+          <div class="pt-2 pl-3">
+           <b-card class="mb-2" style="width:78%; height:200%;" title="Frequency of Crimes">
+             <b-col :cols="24">  
+              <div style="padding-bottom:10px; width:100%;">
+                <div>
+                  <div v-if="crimeTypes.length > 0">
+                    <b-table striped hover :items="crimeTypes" />
                       </div>
-                  </b-card>
-                  </div> -->
-                <div class="col-sm-4">
-                  <b-card  style="height:100px; border-top: 3px solid red;" >
-                  <div class="infocard-header">
-                  Highest Crime Station
-                  <div class="highestCrimeStation">
-                  {{highestCrimeStation}} ( {{ maxCrimes }} )
+                      <div v-else>
+                        <div style="padding-top:1px;font-size: 14px; font-weight: 200;">
+                              <center><b> No Crimes Found! </b> </center>
+                        </div>
+                          <div style="padding-top:1px;font-size: 12px; font-weight: 200;">
+                              <center> Please type in an address to view crimes. </center>
+                          </div>
+                      </div>
                   </div>
-                   </div>
-                  </b-card>
-                 </div>
-              </b-row>
-            </div>
+                </div>
+             </b-col>
+          </b-card>
+          </div>
          </b-card>
         </b-row>
 </div>
@@ -138,7 +161,14 @@ export default {
       highestCrimeStation: '',
       maxCrimes: 0,
       crimeTypes: [],
-      totalCrimes: 0
+      totalCrimes: 0,
+      // fields: {
+      //   Category: {
+      //     key: 'Category',
+      //     label: 'Category',
+      //     sortable: true
+      //   }
+      // },
     }
   },
   methods: {
@@ -212,10 +242,24 @@ export default {
               this.maxCrimes = res.data.results.length
               this.highestCrimeStation = station.line + station.stop
             }
-            this.crimeTypes.push(res.data.frequencies)
+            var field = {
+              Station: station.line + station.stop
+            }
+            var result = res.data.frequencies
+
+            console.log(result)
+            var array = []
+            array.push(result)
+            this.crimeTypes.push(result)
+            const newArray = this.appendObjTo(array, {Station: station.line + station.stop});
+            console.log(newArray)
           })
       })
-    }
+    },
+  appendObjTo(thatArray, newObj) {
+    const frozenObj = Object.freeze(newObj);
+    return Object.freeze(thatArray.concat(frozenObj));
+  }
   }
 }
 </script>
