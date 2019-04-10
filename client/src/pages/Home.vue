@@ -227,6 +227,7 @@ export default {
     getCrimes() {
       this.totalCrimes = 0
       this.maxCrimes = 0
+      this.crimeTypes = []
       this.stations.forEach(station => {
         var params = {
           latitude: station.latitude,
