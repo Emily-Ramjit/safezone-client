@@ -121,7 +121,7 @@
               <div style="padding-bottom:10px; width:100%;">
                 <div>
                   <div v-if="crimeTypes.length > 0">
-                    <b-table striped hover :items="crimeTypes" />
+                    <b-table striped hover :items="crimeTypes" :fields="fields"/>
                       </div>
                       <div v-else>
                         <div style="padding-top:1px;font-size: 14px; font-weight: 200;">
@@ -162,13 +162,73 @@ export default {
       maxCrimes: 0,
       crimeTypes: [],
       totalCrimes: 0,
-      // fields: {
-      //   Category: {
-      //     key: 'Category',
-      //     label: 'Category',
-      //     sortable: true
-      //   }
-      // },
+      fields: {
+        Station: {
+          key: 'Station',
+          label: 'Station',
+          sortable: true
+        },
+        Burglary: {
+          key: 'Burglary',
+          label: 'Burglary',
+          sortable: true
+        },
+        Felony_Assault: {
+          key: 'Felony Assault',
+          label: 'Felony Assault',
+          sortable: true
+        },
+        Grand_Larceny: {
+          key: 'Grand Larceny',
+          label: 'Grand Larceny',
+          sortable: true
+        },
+         Kidnapping: {
+          key: 'Kidnapping',
+          label: 'Kidnapping',
+          sortable: true
+        },
+        Misdemeanor_Assault: {
+          key: 'Misdemeanor Assault',
+          label: 'Misdemeanor Assault',
+          sortable: true
+        },
+        Misdemeanor_Sex_Crimes: {
+          key: 'Misdemeanor Sex Crimes',
+          label: 'Misdemeanor Sex Crimes',
+          sortable: true
+        },
+        Murder: {
+          key: 'Murder',
+          label: 'Murder',
+          sortable: true
+        },
+         Offenses_against_Public_Order: {
+          key: 'Offenses against Public Order',
+          label: 'Offenses against Public Order',
+          sortable: true
+        },
+        Petit_Larceny: {
+          key: 'Petit Larceny',
+          label: 'Petit Larceny',
+          sortable: true
+        },
+        Rape: {
+          key: 'Rape',
+          label: 'Rape',
+          sortable: true
+        },
+        Robbery: {
+          key: 'Robbery',
+          label: 'Robbery',
+          sortable: true
+        },
+        Shootings: {
+          key: 'Shootings',
+          label: 'Shootings',
+          sortable: true
+        }
+      },
     }
   },
   methods: {
@@ -247,18 +307,18 @@ export default {
               Station: station.line + station.stop
             }
             var result = res.data.frequencies
-
-            console.log(result)
             var array = []
             array.push(result)
-            this.crimeTypes.push(result)
-            const newArray = this.appendObjTo(array, {Station: station.line + station.stop});
-            console.log(newArray)
+            
+            var newArray = this.appendObjTo(array, field);
+            newArray[0].Station = newArray[1].Station
+            this.crimeTypes.push(newArray[0])
+            console.log(this.crimeTypes)
           })
       })
     },
   appendObjTo(thatArray, newObj) {
-    const frozenObj = Object.freeze(newObj);
+    var frozenObj = Object.freeze(newObj);
     return Object.freeze(thatArray.concat(frozenObj));
   }
   }
