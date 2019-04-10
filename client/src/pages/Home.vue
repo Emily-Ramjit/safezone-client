@@ -47,15 +47,32 @@
            <b-col :cols="4">
              <div class="ml-4">
               <div style="padding-left: 160px; width: 88%;">
-             <div style="padding-top:1px;font-size: 18px; font-weight: 200;" >
+             <div style="padding-top:1px; padding-bottom:1px; font-size: 18px; font-weight: 200;" >
+             <img src='/static/icons8-train-64.png' height="20" width="20"/>
               Stations Nearby 
              </div>
+
+           <div v-if="stations.length > 0">
             <resource-list
             :items="stations">
            </resource-list>
            </div>
+
+         <div v-else>
+           <b-card>
+           <div style="padding-top:1px;font-size: 14px; font-weight: 200;">
+               <center><b> No Stations Found! </b> </center>
+          </div>
+          <div style="padding-top:1px;font-size: 12px; font-weight: 200;">
+               <center> Please type in a valid address. </center>
+             </div>
+           </b-card>
+        </div>
+
+           </div>
            </div>
           </b-col>
+          
           </b-row>
 
               <div>
@@ -112,26 +129,7 @@ export default {
   },
   data () {
     return {
-      stations: [
-        {
-          line: 'F',
-          stop: 'Lexington Ave. 63',
-          longitude: -73.9639,
-          latitude: 40.7679
-        },
-        {
-          line: '6',
-          stop: 'Hunter College - 68th Ave',
-          longitude: -73.9639,
-          latitude: 40.7679
-        },
-        {
-          line: 'R',
-          stop: 'Lexington Ave - 59',
-          longitude: -73.9639,
-          latitude: 40.7679
-        }
-      ],
+      stations: [],
       safestRoute: false,
       longitude: -73.9639,
       latitude: 40.7679,
