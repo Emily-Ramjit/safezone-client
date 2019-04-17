@@ -122,7 +122,7 @@ export default {
 .navbar-custom {
     color: #FFFFFF;
     background-color: #e4a51e;
-    height:50px;
+    height:60px;
 }
 .navbar-brand
 {

@@ -31,6 +31,7 @@ export default {
 <style>
   .custom-nav {
     width: 200px;
+    min-height:100%;
     padding-left: 10px;
     background-color:#494e54;
   }

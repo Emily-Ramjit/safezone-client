@@ -13,6 +13,7 @@ import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import PolarisVue from '@eastsideco/polaris-vue'
 import '@eastsideco/polaris-vue/lib/polaris-vue.css'
+// import 'mdbvue/build/css/mdb.css'
 
 // Proprietary Components Import
 import Avatar from 'vue-avatar'
