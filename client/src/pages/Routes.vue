@@ -51,6 +51,7 @@
               <b-col >  
 
                 <div v-for="route in allRoutes">
+                  Rating: {{route.rating}}
                   <div v-for="routeInfo in route">
                  <img src='/static/icons8-subway-filled-50.png' height="25" width="25"/>
                {{routeInfo.departure_time.text}} - {{routeInfo.arrival_time.text}}
@@ -188,11 +189,15 @@ export default {
       }
       api.getRoutes(params)
         .then(res => {
+          var allRatings = res.data.ratings
           console.log(res.data.data.routes)
           res.data.data.routes.forEach(element => {
             this.allRoutes.push(element.legs)
           })
           console.log(this.allRoutes)
+          for (var i = 0; i < this.allRoutes.length; i++) {
+              this.allRoutes[i].rating = allRatings[i]
+            }
         }).then(res => {
          this.isLoaded = true
         })
