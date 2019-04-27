@@ -20,7 +20,7 @@
 
   <b-col :cols="5">
      <b-row class="mt-2">            
-        <b-card class="ml-3" style="width: 600px; height: 100px; background-color: rgb(255, 195, 90);">
+        <b-card class="ml-3" style="width: 600px; height: 100px; background-color:rgb(247, 247, 247);;">
            <b-row>
              <b-col :cols="1">
                <div class="pt-4">
@@ -29,9 +29,9 @@
              </b-col >
               <b-col :cols="11" >
                 <div class="pt-4">
-                <b-form-input type="text" :value="'Choose a starting point...'" >
+                <b-form-input type="text"  v-model="originAddress" :placeholder="'Choose a starting point...'" >
                 </b-form-input>
-                 <b-form-input type="text" :value="'Choose destination...'" >
+                 <b-form-input type="text" v-model="destinationAddress"  :placeholder="'Choose destination...'" @keydown.enter.native="getCoordinatesByAddress(originAddress, destinationAddress)" >
                 </b-form-input>
                 </div>
               </b-col>
@@ -39,55 +39,41 @@
           </b-card>
      </b-row>
        <b-row>          
-        <b-card class="ml-3" style="width: 600px;height: 40px;background-color: rgb(218, 153, 39);">
-           <b-row>
-              <b-col > 
-                <h4> <div style="color:white"> Safest Route  </div> </h4>
-              </b-col>
-                 <b-col > 
-                <h4> <div style="color:white"> All Routes  </div> </h4>
-              </b-col>
-            </b-row>
+        <b-card class="ml-3" style="width: 600px;height: 40px;background-color: rgb(247, 247, 247);;">
+          All Routes
           </b-card>
        </b-row>
 
        <b-row>          
-        <b-card class="ml-3" style="width: 600px;height: 190px;background-color: #fbf8f8;">
+        <b-card class="ml-3" style="width: 600px;height:500%;background-color: #fbf8f8;">
            <b-row>
               <b-col >  
+
+                <div v-for="route in allRoutes">
+                  <div v-for="routeInfo in route">
                  <img src='/static/icons8-subway-filled-50.png' height="25" width="25"/>
-                
-                5:01 PM — 5:51 PM
+               {{routeInfo.departure_time.text}} - {{routeInfo.arrival_time.text}}
                 <div class="float-right">
-                  52 Minutes
+                 {{routeInfo.duration.text}}
                   </div>
                 <br>
                 <div class="pl-5">
-                E  —  M/R —  Bus
+                  <div v-for="pathInfo in routeInfo.steps">
+                    <!-- <div v-if="pathInfo.travel_mode === 'WALKING'">
+                        Walk - 
+                      </div> -->
+                     <div v-if="pathInfo.travel_mode === 'TRANSIT'">
+                       <span>
+                        {{pathInfo.transit_details.line.short_name}} TOWARDS {{pathInfo.transit_details.line.name}}
+                       </span>
+                     </div>
                 </div>
-                <hr>
-                 <img src='/static/icons8-subway-filled-50.png' height="25" width="25"/>
-                
-                5:01 PM — 5:51 PM
-                <div class="float-right">
-                  52 Minutes
-                  </div>
-                <br>
-                <div class="pl-5">
-                E  —  M/R —  Bus
                 </div>
+
                 <hr>
-                  <img src='/static/icons8-subway-filled-50.png' height="25" width="25"/>
-                
-                5:01 PM — 5:51 PM
-                <div class="float-right">
-                  52 Minutes
-                  </div>
-                <br>
-                <div class="pl-5">
-                E  —  M/R —  Bus
                 </div>
-                <hr>
+                </div>
+
               </b-col>
             </b-row>
           </b-card>
@@ -128,13 +114,15 @@
             </GmapMap>
         </div>
           </b-col>
-</b-row>
-
+        </b-row>
       </b-card>
    </b-row>
 </div>
 </template>
 <script>
+
+/* eslint-disable */
+import api from '@/api/api'
 export default {
   mounted () {
     this.fetch()
@@ -150,7 +138,15 @@ export default {
           ]
         }
       ],
-      stations: []
+      stations: [],
+      originAddress: '',
+      destinationAddress: '',
+
+      originLatitude: 0,
+      originLongitude: 0,
+      destinationLatitude: 0,
+      destinationLongitude: 0,
+      allRoutes: []
     }
   },
   methods: {
@@ -161,6 +157,47 @@ export default {
         latitude: '',
         longitude: ''
       }
+    },
+    getCoordinatesByAddress(origin, destination) {
+      var originParams = {
+        address: origin,
+        key: ''
+      }
+      var destinationParams = {
+        address: destination,
+        key: ''
+      }
+      api.getCoordinatesByAddress(originParams)
+        .then(res => {
+          this.originLongitude = res.data.results[0].geometry.location.lng
+          this.originLatitude = res.data.results[0].geometry.location.lat
+        }).then(res => {
+          api.getCoordinatesByAddress(destinationParams)
+        .then(res => {
+          this.destinationLongitude = res.data.results[0].geometry.location.lng
+          this.destinationLatitude = res.data.results[0].geometry.location.lat
+        })
+       }).then(res => {
+         this.getRoutes()
+       })
+    },
+    getRoutes() {
+      this.allRoutes = []
+      var params = {
+        origin_latitude: this.originLatitude,
+        origin_longitude: this.originLongitude,
+        dest_latitude: this.destinationLatitude,
+        dest_longitude: this.destinationLongitude,
+        key: ''
+      }
+      api.getRoutes(params)
+        .then(res => {
+          console.log(res.data.data.routes)
+          res.data.data.routes.forEach(element => {
+            this.allRoutes.push(element.legs)
+          })
+          console.log(this.allRoutes)
+        })
     }
   }
 }

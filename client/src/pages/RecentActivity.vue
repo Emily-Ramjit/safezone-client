@@ -65,8 +65,8 @@ export default {
         {
           title: 'Recent Activity',
           items: [
-            {content: 'Home', url: '/home'}
-            // {content: 'Routes', url: '/routes'}
+            {content: 'Home', url: '/home'},
+            {content: 'Routes', url: '/routes'}
           ]
         }
       ],
