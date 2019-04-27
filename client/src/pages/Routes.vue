@@ -10,7 +10,7 @@
       </div>
       </b-row>
       <b-row class="mb-2 ml-0">
-      <sz-sidebar> </sz-sidebar>
+      <sz-sidebar :sections="sections"> </sz-sidebar>
 
       <b-card class="mb-2" style="width:85%; min-height:200%;">
            <div style="font-size: 25px; font-weight: 200;"> Routes 
@@ -44,6 +44,7 @@
           </b-card>
        </b-row>
 
+<div v-if="isLoaded">
        <b-row>          
         <b-card class="ml-3" style="width: 600px;height:500%;background-color: #fbf8f8;">
            <b-row>
@@ -78,6 +79,7 @@
             </b-row>
           </b-card>
        </b-row>
+</div>
   </b-col>
          <!-- <b-card style="max-width: 35%;min-height: 20%;background-color: rgb(243, 165, 29);">
            <b-row>
@@ -98,7 +100,7 @@
          <b-col :cols="6">
            <div>
             <GmapMap ref="mymap"
-              :center="{lat:40.7618356, lng:-73.9821805}"
+              :center="{lat:this.destinationLatitude, lng:this.destinationLongitude}"
               :zoom="16"
               map-type-id="terrain"
               style="width: 118%; height: 350px"
@@ -138,25 +140,19 @@ export default {
           ]
         }
       ],
-      stations: [],
+      isLoaded: false,
       originAddress: '',
       destinationAddress: '',
 
       originLatitude: 0,
       originLongitude: 0,
-      destinationLatitude: 0,
-      destinationLongitude: 0,
+      destinationLatitude: 40.7618356,
+      destinationLongitude: -73.9821805,
       allRoutes: []
     }
   },
   methods: {
     fetch () {
-      this.stations[0] =  {
-        line: 'line',
-        stop: 'stop',
-        latitude: '',
-        longitude: ''
-      }
     },
     getCoordinatesByAddress(origin, destination) {
       var originParams = {
@@ -197,6 +193,8 @@ export default {
             this.allRoutes.push(element.legs)
           })
           console.log(this.allRoutes)
+        }).then(res => {
+         this.isLoaded = true
         })
     }
   }
