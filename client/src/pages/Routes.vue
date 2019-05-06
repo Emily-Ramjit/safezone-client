@@ -52,15 +52,15 @@
 
                 <div v-for="route in allRoutes">
                   Rating: {{route.rating}}
-                  <div v-for="routeInfo in route">
+                  <br>
                  <img src='/static/icons8-subway-filled-50.png' height="25" width="25"/>
-               {{routeInfo.departure_time.text}} - {{routeInfo.arrival_time.text}}
+               {{route.leg.departure_time.text}} - {{route.leg.arrival_time.text}}
                 <div class="float-right">
-                 {{routeInfo.duration.text}}
+                 {{route.leg.duration.text}}
                   </div>
                 <br>
                 <div class="pl-5">
-                  <div v-for="pathInfo in routeInfo.steps">
+                  <div v-for="pathInfo in route.leg.steps">
                     <!-- <div v-if="pathInfo.travel_mode === 'WALKING'">
                         Walk - 
                       </div> -->
@@ -73,7 +73,6 @@
                 </div>
 
                 <hr>
-                </div>
                 </div>
 
               </b-col>
@@ -100,7 +99,7 @@
 
          <b-col :cols="6">
            <div>
-            <GmapMap ref="mymap"
+            <GmapMap ref="map" id="map"
               :center="{lat:this.destinationLatitude, lng:this.destinationLongitude}"
               :zoom="16"
               map-type-id="terrain"
@@ -173,9 +172,9 @@ export default {
         .then(res => {
           this.destinationLongitude = res.data.results[0].geometry.location.lng
           this.destinationLatitude = res.data.results[0].geometry.location.lat
-        })
-       }).then(res => {
+        }).then(res => {
          this.getRoutes()
+         })
        })
     },
     getRoutes() {
@@ -189,17 +188,32 @@ export default {
       }
       api.getRoutes(params)
         .then(res => {
-          var allRatings = res.data.ratings
-          console.log(res.data.data.routes)
-          res.data.data.routes.forEach(element => {
-            this.allRoutes.push(element.legs)
-          })
+          console.log(res)
+          var allRatings = []
+          this.allRoutes = res.data
+          // res.data.forEach(element => {
+          //   this.allRoutes.push(element)
+          //   allRatings.push(element.rating)
+          // })
           console.log(this.allRoutes)
-          for (var i = 0; i < this.allRoutes.length; i++) {
-              this.allRoutes[i].rating = allRatings[i]
-            }
         }).then(res => {
          this.isLoaded = true
+        // console.log(map)
+        // var flightPlanCoordinates = [
+        //   {lat: this.originLatitude, lng: this.originLongitude},
+        //   {lat: this.destinationLatitude, lng: this.destinationLongitude}
+        // ];
+        // var flightPath = new google.maps.Polyline({
+        //   path: flightPlanCoordinates,
+        //   geodesic: true,
+        //   strokeColor: '#FF0000',
+        //   strokeOpacity: 1.0,
+        //   strokeWeight: 2
+        // });
+
+        // this.$refs.map.then(map => {
+        //   flightPath.setMap(map);
+        // });
         })
     }
   }

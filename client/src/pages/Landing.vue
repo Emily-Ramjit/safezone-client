@@ -19,15 +19,18 @@
 </div>
 
 <div id="app">
-    <input ref="autocomplete"
+    <!-- <input ref="autocomplete"
         placeholder="Search by address..."
         class="search-location"
         onfocus="value = ''"
         v-model="searchValue"
-        type="text" />
-        <div id=buttonGo class="col-2 col-md-1">
-          <sz-button primary :size='"lg"' @click.native="handleClick(searchValue)">Go!</sz-button>
-        </div>
+        @keydown.enter.native="handleClick(searchValue)"
+        type="text" /> -->
+
+        <b-form-input class="search-location" ref="autocomplete" type="text" v-model="searchValue"  
+        :placeholder="'Search by address...'" @keydown.enter.native="handleClick(searchValue)" >
+        </b-form-input>
+
 </div>
 
 </div>
