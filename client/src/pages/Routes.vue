@@ -9,18 +9,17 @@
         </div>
       </div>
       </b-row>
+      
       <b-row class="mb-2 ml-0">
-      <sz-sidebar :sections="sections"> </sz-sidebar>
 
-      <b-card class="mb-2" style="width:85%; min-height:200%;">
+      <b-card class="mb-2" style="width:100%; min-height:200%;">
            <div style="font-size: 25px; font-weight: 200;"> Routes 
                <hr class="my-4" />
            </div>
-<b-row>
-
-  <b-col :cols="5">
+    <b-row>
+    <b-col :cols="4">
      <b-row class="mt-2">            
-        <b-card class="ml-3" style="width: 600px; height: 100px; background-color:rgb(247, 247, 247);;">
+        <b-card class="ml-4" style="width: 103%; height: 100px; background-color:rgb(247, 247, 247);;">
            <b-row>
              <b-col :cols="1">
                <div class="pt-4">
@@ -39,14 +38,14 @@
           </b-card>
      </b-row>
        <b-row>          
-        <b-card class="ml-3" style="width: 600px;height: 40px;background-color: rgb(247, 247, 247);;">
+        <b-card class="ml-4" style="width: 103%;height: 40px;background-color: rgb(247, 247, 247);;">
           All Routes
           </b-card>
        </b-row>
 
-<div v-if="isLoaded">
+<div v-if="isLoaded && allRoutes.length > 0">
        <b-row>          
-        <b-card class="ml-3" style="width: 600px;height:500%;background-color: #fbf8f8;">
+        <b-card class="ml-4" style="width: 103%;height:500%;background-color: rgb(255, 255, 255)">
            <b-row>
               <b-col >  
 
@@ -61,12 +60,12 @@
                 <br>
                 <div class="pl-5">
                   <div v-for="pathInfo in route.leg.steps">
-                    <!-- <div v-if="pathInfo.travel_mode === 'WALKING'">
-                        Walk - 
-                      </div> -->
                      <div v-if="pathInfo.travel_mode === 'TRANSIT'">
-                       <span>
+                       <span v-if="pathInfo.transit_details.line.short_name">
                         {{pathInfo.transit_details.line.short_name}} TOWARDS {{pathInfo.transit_details.line.name}}
+                       </span>
+                       <span v-else>
+                          LIRR TOWARDS {{pathInfo.transit_details.line.name}}
                        </span>
                      </div>
                 </div>
@@ -80,39 +79,40 @@
           </b-card>
        </b-row>
 </div>
+
+         <div v-else>
+           <b-card style="width: 103%;">
+           <div style="padding-top:1px;font-size: 14px; font-weight: 200;">
+               <center><b> No Routes Found! </b> </center>
+          </div>
+          <div style="padding-top:1px;font-size: 12px; font-weight: 200;">
+               <center> Please type in a valid address. </center>
+             </div>
+           </b-card>
+        </div>
   </b-col>
-         <!-- <b-card style="max-width: 35%;min-height: 20%;background-color: rgb(243, 165, 29);">
-           <b-row>
-              <b-col >
-               <p> Safest Route </p>
-              </b-col>
-               <b-col >
-               <p> Fastest Route </p>
-              </b-col>
-            </b-row>
-          </b-card>
 
-         <b-card class="mb-2" style="max-width: 35%;min-height: 170%">
-           <b-row class="mb-2">
-            </b-row>
-          </b-card> -->
-
-         <b-col :cols="6">
+         <b-col :cols="8">
            <div>
             <GmapMap ref="map" id="map"
               :center="{lat:this.destinationLatitude, lng:this.destinationLongitude}"
-              :zoom="16"
+              :zoom="zoom"
               map-type-id="terrain"
-              style="width: 118%; height: 350px"
+              style="width: 100%; height: 550px"
             >
               <GmapMarker
                 :key="index"
-                v-for="(m, index) in markers"
-                :position="m.position"
+                :position="{lat:this.destinationLatitude, lng:this.destinationLongitude}"
                 :clickable="true"
                 :draggable="true"
-                @click="center=m.position"
               />
+              <GmapMarker
+                :key="index"
+                :position="{lat:this.originLatitude, lng:this.originLongitude}"
+                :clickable="true"
+                :draggable="true"
+              />
+
             </GmapMap>
         </div>
           </b-col>
@@ -148,7 +148,8 @@ export default {
       originLongitude: 0,
       destinationLatitude: 40.7618356,
       destinationLongitude: -73.9821805,
-      allRoutes: []
+      allRoutes: [],
+      zoom: 16
     }
   },
   methods: {
@@ -173,6 +174,8 @@ export default {
           this.destinationLongitude = res.data.results[0].geometry.location.lng
           this.destinationLatitude = res.data.results[0].geometry.location.lat
         }).then(res => {
+          console.log(this.$refs.map)
+         this.zoom = 14
          this.getRoutes()
          })
        })
@@ -191,29 +194,9 @@ export default {
           console.log(res)
           var allRatings = []
           this.allRoutes = res.data
-          // res.data.forEach(element => {
-          //   this.allRoutes.push(element)
-          //   allRatings.push(element.rating)
-          // })
           console.log(this.allRoutes)
         }).then(res => {
          this.isLoaded = true
-        // console.log(map)
-        // var flightPlanCoordinates = [
-        //   {lat: this.originLatitude, lng: this.originLongitude},
-        //   {lat: this.destinationLatitude, lng: this.destinationLongitude}
-        // ];
-        // var flightPath = new google.maps.Polyline({
-        //   path: flightPlanCoordinates,
-        //   geodesic: true,
-        //   strokeColor: '#FF0000',
-        //   strokeOpacity: 1.0,
-        //   strokeWeight: 2
-        // });
-
-        // this.$refs.map.then(map => {
-        //   flightPath.setMap(map);
-        // });
         })
     }
   }

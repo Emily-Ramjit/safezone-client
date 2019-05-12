@@ -8,9 +8,7 @@
           </b-navbar-brand>
         </div>
       </div>
-      <sz-sidebar :sections="sections"> </sz-sidebar>
-
-      <b-card class="mb-2" style="width:85%; height:200%;" title="Recent Activity" :sub-title="page.subTitle">
+      <b-card class="mb-2" style="width:100%; height:200%;" title="Recent Activity" :sub-title="page.subTitle">
         <b-col :cols="24">
            <div class= "float-right pb-2">
            <b-form-select @change="updateFrequency($event)" v-model="selected" :options="options" />
@@ -121,7 +119,7 @@ export default {
 <style>
 .navbar-custom {
     color: #FFFFFF;
-    background-color: #e4a51e;
+    background-color: #ffc107;
     height:60px;
 }
 .navbar-brand

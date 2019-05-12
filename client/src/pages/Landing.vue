@@ -18,7 +18,6 @@
   </b-jumbotron>
 </div>
 
-<div id="app">
     <!-- <input ref="autocomplete"
         placeholder="Search by address..."
         class="search-location"
@@ -31,7 +30,6 @@
         :placeholder="'Search by address...'" @keydown.enter.native="handleClick(searchValue)" >
         </b-form-input>
 
-</div>
 
 </div>
 </template>
@@ -80,6 +78,20 @@
   line-height: 30px;
   text-align: center;
   border-radius: 10px;
+}
+.form-control {
+    display: block;
+    width: 60% !important;
+    height: calc(2.25rem + 2px);
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius: .25rem;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
 }
 </style>
 

@@ -7,10 +7,16 @@
     >
 
   <b-row style="padding-left:10px;">
-      <div style="padding-left:5px font-size: 10px; font-weight: 200;"> 
-            <b>{{item.line}}</b>  {{item.stop}} </div>
+      <div style="padding-left:5px font-size: 10px; font-weight: 200;">
+          <span v-html="item.icon"/> 
+                {{item.stop}} 
+             </span>
+          <hr/>
+       Percentile: {{item.percentile}}
+      </div>
+       
   </b-row>
-  <sz-button class="float-right" plain @click.native="setRoute(item.latitude, item.longitude, item.line, item.stop)"> View Crimes
+  <sz-button class="float-right" plain @click.native="setRoute(item.latitude, item.longitude, item.icon, item.stop)"> View Crimes
  <i class="fas fa-long-arrow-alt-right"></i> </sz-button>
     </resource-list-item>
   </div>
@@ -27,8 +33,8 @@ export default {
     }
   },
   methods: {
-    setRoute (lat, long, line, stop) {
-      var station = line + ' - ' + stop
+    setRoute (lat, long, icon, stop) {
+      var station = icon + ' - ' + stop
       this.$router.push({name: 'recentactivity', params: { station: station, latitude: lat, longitude: long }})
     }
   }

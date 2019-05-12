@@ -11,50 +11,62 @@
       </div>
       </b-row>
       <b-row class="mb-2 ml-0">
-      <sz-sidebar> </sz-sidebar>
-
-      <b-card class="mb-2" style="width:85%; height:200%;">
+      <b-card class="mb-2" style="width:100%; height:200%; background-color:#f9f9f9;">
         
         <b-col :cols="10">
-           <div style="font-size: 25px; font-weight: 200;"> Statistics 
-               <hr class="my-4" />
+           <div style="font-size: 18px; font-weight: 200;"> 
+             <b-tabs content-class="mt-3">
+              <b-tab active title="Statistics"></b-tab>
+              <b-tab @click="routeTo" title="Routes"></b-tab>
+            </b-tabs>
+
            </div>
            <div>
             <b-row class="mt-2 pb-3" style="width:100%;">
+              <div class="col-sm-4">
+                  <b-card  style="height:120px; border-top: 3px solid #ea974d" >
+                  <div class="infocard-header">
+                  SAFEST STATION
+                  <hr>
+                  <div class="highestCrimeStation">
+                <div v-if="stations.length > 0">
+                  <span  v-html="stations[0].icon">
+                  </span> 
+                    {{stations[0].stop}}
+                 <p> Percentile: {{ stations[0].percentile }} % </p>
+                </div>
+                <div v-else>
+                  n/a
+                </div>
+                  </div>
+                   </div>
+                  </b-card>
+                </div>
+
                 <div class="col-sm-4">
-                  <b-card style="height:100px; border-top: 3px solid purple;" >
+                  <b-card style="height:120px; border-top: 3px solid #ea974d" >
                  <div class="infocard-header">
-                  Total Crimes (YTD)
+                  TOTAL CRIMES (YTD)
+                  <hr>
                   <div class="totalCrimes">
                   {{totalCrimes}}
                   </div>
                   </div>
                  </b-card>
                 </div>
-                <!-- <div class="col-sm-3">
-                <b-card  style="height:100px;border-top: 3px solid red;" >
-                  <div class="infocard-header">
-                  Overall Risk
-                 </div>
-                 </b-card>
-                </div>
-                <div class="col-sm-3">
-                  <b-card  style="height:100px; border-top: 3px solid purple;" >
-                      <div class="infocard-header">
-                  Top Crime Categories
-                      </div>
-                  </b-card>
-                  </div> -->
                 <div class="col-sm-4">
-                  <b-card  style="height:100px; border-top: 3px solid red;" >
+                  <b-card  style="height:120px; border-top: 3px solid #ea974d" >
                   <div class="infocard-header">
-                  Highest Crime Station
+                  HIGHEST CRIME STATION
+                  <hr>
                   <div class="highestCrimeStation">
-                  {{highestCrimeStation}} ( {{ maxCrimes }} )
+                  <div v-html="highestCrimeStation"/> 
+                 <p> Total Crimes: {{ maxCrimes }} </p>
                   </div>
                    </div>
                   </b-card>
                  </div>
+
               </b-row>
             </div>
 
@@ -72,15 +84,13 @@
               :center="{lat:this.latitude, lng:this.longitude}"
               :zoom="16"
               map-type-id="terrain"
-              style="width: 118%; height: 350px"
+              style="width: 118%; height: 500px"
             >
               <GmapMarker
                 :key="index"
-                v-for="(m, index) in markers"
-                :position="m.position"
+                :position="{lat:this.latitude, lng:this.longitude}"
                 :clickable="true"
                 :draggable="true"
-                @click="center=m.position"
               />
             </GmapMap>
         </div>
@@ -116,12 +126,14 @@
           
           </b-row>
           <div class="pt-2 pl-3">
-           <b-card class="mb-2" style="width:78%; height:200%;" title="Frequency of Crimes">
+           <b-card class="mb-2" style="width:96%; height:200%;" title="Frequency of Crimes">
              <b-col :cols="24">  
               <div style="padding-bottom:10px; width:100%;">
                 <div>
                   <div v-if="crimeTypes.length > 0">
-                    <b-table striped hover :items="crimeTypes" :fields="fields"/>
+                    <b-table striped hover :items="crimeTypes" :fields="fields">
+                       <span slot="Station" slot-scope="data" v-html="data.value"></span>
+                    </b-table>
                       </div>
                       <div v-else>
                         <div style="padding-top:1px;font-size: 14px; font-weight: 200;">
@@ -251,15 +263,20 @@ export default {
           console.log(res.data)
           this.stations = res.data.map(station => {
             var lines = ''
-            for(var i = 0; i < station.lines.length; i++){
+            var icons = ''
+            for(var i = 0; i < station.lines.length; i++) {
+              icons = icons + this.setIcons(station.lines[i])
               lines = lines + station.lines[i] + "," 
             }
             station.lines = lines
+            station.icons = icons
             return {
                line: station.lines,
+               icon: station.icons,
                stop: station.name, 
                longitude: station.longitude,
-               latitude: station.latitude
+               latitude: station.latitude,
+               percentile: station.percentile
             }
           })
         }).then(res => {
@@ -301,10 +318,10 @@ export default {
             this.totalCrimes = this.totalCrimes + res.data.results.length;
             if(res.data.results.length > this.maxCrimes) {
               this.maxCrimes = res.data.results.length
-              this.highestCrimeStation = station.line + station.stop
+              this.highestCrimeStation = station.icon + ' ' + station.stop
             }
             var field = {
-              Station: station.line + station.stop
+              Station: station.icon + station.stop
             }
             var result = res.data.frequencies
             var array = []
@@ -317,10 +334,109 @@ export default {
           })
       })
     },
-  appendObjTo(thatArray, newObj) {
-    var frozenObj = Object.freeze(newObj);
-    return Object.freeze(thatArray.concat(frozenObj));
-  }
+   appendObjTo(thatArray, newObj) {
+      var frozenObj = Object.freeze(newObj);
+      return Object.freeze(thatArray.concat(frozenObj));
+   },
+   routeTo() {
+     this.$router.push({name: 'routes'})
+   },
+   setIcons(line) {
+     switch(line) { 
+        case "1": { 
+            return "<img src='/static/NYCS-bull-trans-1.svg' height='20' width='20'/>"
+            break; 
+        } 
+        case "2": { 
+            return "<img src='/static/NYCS-bull-trans-2.svg' height='20' width='20'/>"
+            break; 
+        } 
+        case "3": {
+            return "<img src='/static/NYCS-bull-trans-3.svg' height='20' width='20'/>"
+            break;    
+        } 
+        case "4": { 
+            return "<img src='/static/NYCS-bull-trans-4.svg' height='20' width='20'/>"
+            break; 
+        }
+        case "5": { 
+            return  "<img src='/static/NYCS-bull-trans-5.svg' height='20' width='20'/>"
+            break; 
+        }          
+        case "6": { 
+            return "<img src='/static/NYCS-bull-trans-6.svg' height='20' width='20'/>"
+            break; 
+        }    
+        case "7": { 
+            return "<img src='/static/NYCS-bull-trans-7.svg' height='20' width='20'/>"
+            break; 
+        } 
+        case "A": {
+            return "<img src='/static/NYCS-bull-trans-A.svg' height='20' width='20'/>"
+            break;    
+        } 
+        case "B": { 
+            return "<img src='/static/NYCS-bull-trans-B.svg' height='20' width='20'/>"
+            break; 
+        }
+        case "C": { 
+            return  "<img src='/static/NYCS-bull-trans-C.svg' height='20' width='20'/>" 
+            break; 
+        }          
+        case "D": { 
+           return "<img src='/static/NYCS-bull-trans-D.svg' height='20' width='20'/>"
+            break; 
+        }  
+        case "E": { 
+            return  "<img src='/static/NYCS-bull-trans-E.svg' height='20' width='20'/>"
+            break; 
+        } 
+        case "F": { 
+            return "<img src='/static/NYCS-bull-trans-F.svg' height='20' width='20'/>"
+            break; 
+        } 
+        case "G": {
+            return "<img src='/static/NYCS-bull-trans-G.svg' height='20' width='20'/>"
+            break;    
+        } 
+        case "J": { 
+            return "<img src='/static/NYCS-bull-trans-J.svg' height='20' width='20'/>"
+            break; 
+        }
+        case "L": { 
+            return "<img src='/static/NYCS-bull-trans-L.svg' height='20' width='20'/>"
+            break; 
+        }          
+        case "M": { 
+            return "<img src='/static/NYCS-bull-trans-M.svg' height='20' width='20'/>"
+            break; 
+        }   
+        case "N": { 
+            return "<img src='/static/NYCS-bull-trans-N.svg' height='20' width='20'/>"
+            break; 
+        }
+        case "Q": { 
+            return "<img src='/static/NYCS-bull-trans-Q.svg' height='20' width='20'/>"
+            break; 
+        }          
+        case "R": { 
+            return "<img src='/static/NYCS-bull-trans-R.svg' height='20' width='20'/>"
+            break; 
+        }  
+        case "S": { 
+            return "<img src='/static/NYCS-bull-trans-S.svg' height='20' width='20'/>"
+            break; 
+        }  
+        case "W": { 
+            return "<img src='/static/NYCS-bull-trans-W.svg' height='20' width='20'/>"
+            break; 
+        }
+        case "Z": { 
+            return "<img src='/static/NYCS-bull-trans-Z.svg' height='20' width='20'/>"
+            break; 
+        }
+      }
+    }
   }
 }
 </script>
@@ -340,19 +456,19 @@ export default {
 .infocard-header {
   font-size: 16px;
   padding-left: 15px;
-  font-weight: 200;
+  font-weight: 500;
 }
 
 .totalCrimes {
-  font-size:35px;
-  padding-top:14px;
-  color:purple;
-  position:absolute;
+  color:black;
+  font-weight: 400;
+  font-size: 20px;
+  letter-spacing: 1px;
 }
 .highestCrimeStation {
-  font-size:20px;
-  padding-top:14px;
-  position:absolute;
-  color:red;
+  color:black;
+  font-weight: 400;
+  font-size: 20px;
+  letter-spacing: 1px;
 }
 </style>
