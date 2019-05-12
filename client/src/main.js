@@ -15,7 +15,6 @@ import PolarisVue from '@eastsideco/polaris-vue'
 import '@eastsideco/polaris-vue/lib/polaris-vue.css'
 // import 'mdbvue/build/css/mdb.css'
 
-// Proprietary Components Import
 import Avatar from 'vue-avatar'
 import SZButton from './components/SZButton'
 import Layout from './components/Layout'

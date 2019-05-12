@@ -1,158 +1,150 @@
 <template>
-<div id=home>
-
-      <b-row class="ml-0">
+   <div id=home>
+   <b-row class="ml-0">
       <div style="width:100%; height:100%;">
-        <div class="navbar navbar-default navbar-custom">
-          <b-navbar-brand tag="h1" class="mb-0 ml-3">
-            <strong> SafeZone </strong>
-          </b-navbar-brand>
-        </div>
+         <div class="navbar navbar-default navbar-custom">
+            <b-navbar-brand tag="h1" class="mb-0 ml-3">
+               <strong> SafeZone </strong>
+            </b-navbar-brand>
+         </div>
       </div>
-      </b-row>
-      <b-row class="mb-2 ml-0">
+   </b-row>
+   <b-row class="mb-2 ml-0">
       <b-card class="mb-2" style="width:100%; height:200%; background-color:#f9f9f9;">
-        
-        <b-col :cols="10">
-           <div style="font-size: 18px; font-weight: 200;"> 
-             <b-tabs content-class="mt-3">
-              <b-tab active title="Statistics"></b-tab>
-              <b-tab @click="routeTo" title="Routes"></b-tab>
-            </b-tabs>
-
-           </div>
-           <div>
-            <b-row class="mt-2 pb-3" style="width:100%;">
-              <div class="col-sm-4">
-                  <b-card  style="height:120px; border-top: 3px solid #ea974d" >
-                  <div class="infocard-header">
-                  SAFEST STATION
-                  <hr>
-                  <div class="highestCrimeStation">
-                <div v-if="stations.length > 0">
-                  <span  v-html="stations[0].icon">
-                  </span> 
-                    {{stations[0].stop}}
-                 <p> Percentile: {{ stations[0].percentile }} % </p>
-                </div>
-                <div v-else>
-                  n/a
-                </div>
-                  </div>
-                   </div>
-                  </b-card>
-                </div>
-
-                <div class="col-sm-4">
-                  <b-card style="height:120px; border-top: 3px solid #ea974d" >
-                 <div class="infocard-header">
-                  TOTAL CRIMES (YTD)
-                  <hr>
-                  <div class="totalCrimes">
-                  {{totalCrimes}}
-                  </div>
-                  </div>
-                 </b-card>
-                </div>
-                <div class="col-sm-4">
-                  <b-card  style="height:120px; border-top: 3px solid #ea974d" >
-                  <div class="infocard-header">
-                  HIGHEST CRIME STATION
-                  <hr>
-                  <div class="highestCrimeStation">
-                  <div v-html="highestCrimeStation"/> 
-                 <p> Total Crimes: {{ maxCrimes }} </p>
-                  </div>
-                   </div>
-                  </b-card>
-                 </div>
-
-              </b-row>
+         <b-col :cols="10">
+            <div style="font-size: 18px; font-weight: 200;">
+               <b-tabs content-class="mt-3">
+                  <b-tab active title="Statistics"></b-tab>
+                  <b-tab @click="routeTo" title="Routes"></b-tab>
+               </b-tabs>
             </div>
-
-          <div style="padding-bottom:10px; width:90%;">
-            <b-form-input type="text" :value="inputAddress" v-model="inputAddress" :placeholder="'Type in an address...'" @keydown.enter.native="getCoordinatesByAddress(inputAddress)">
-            </b-form-input>
-            </div>
-        </b-col>
-
-
-       <b-row>
-         <b-col :cols="8">
-           <div class="ml-4">
+            <div>
+               <b-row class="mt-2 pb-3" style="width:100%;">
+                  <div class="col-sm-4">
+                     <b-card  style="height:120px; border-top: 3px solid #ea974d" >
+                        <div class="infocard-header">
+                           SAFEST STATION
+                           <hr>
+                           <div class="highestCrimeStation">
+                              <div v-if="stations.length > 0">
+                                 <span  v-html="stations[0].icon">
+                                 </span> 
+                                 {{stations[0].stop}}
+                                 <p> Percentile: {{ stations[0].percentile }} % </p>
+                              </div>
+                              <div v-else>
+                                 n/a
+                              </div>
+                           </div>
+                        </div>
+                     </b-card>
+                  </div>
+                  <div class="col-sm-4">
+                     <b-card style="height:120px; border-top: 3px solid #ea974d" >
+                        <div class="infocard-header">
+                           TOTAL CRIMES (YTD)
+                           <hr>
+                           <div class="totalCrimes">
+                              {{totalCrimes}}
+                           </div>
+                        </div>
+                     </b-card>
+                  </div>
+                  <div class="col-sm-4">
+                     <b-card  style="height:120px; border-top: 3px solid #ea974d" >
+                        <div class="infocard-header">
+                           HIGHEST CRIME STATION
+                           <hr>
+                           <div class="highestCrimeStation">
+                              <div v-html="highestCrimeStation"/>
+                                 <p> Total Crimes: {{ maxCrimes }} </p>
+                              </div>
+                           </div>
+                     </b-card>
+                     </div>
+               </b-row>
+               </div>
+               <div style="padding-bottom:10px; width:90%;">
+                  <b-form-input type="text" :value="inputAddress" v-model="inputAddress" :placeholder="'Type in an address...'" @keydown.enter.native="getCoordinatesByAddress(inputAddress)">
+                  </b-form-input>
+               </div>
+         </b-col>
+         <b-row>
+          <b-col :cols="8">
+          <div class="ml-4">
             <GmapMap ref="mymap"
-              :center="{lat:this.latitude, lng:this.longitude}"
-              :zoom="16"
-              map-type-id="terrain"
-              style="width: 118%; height: 500px"
-            >
-              <GmapMarker
+                :center="{lat:this.latitude, lng:this.longitude}"
+                :zoom="16"
+                map-type-id="terrain"
+                style="width: 118%; height: 500px"
+                >
+            <GmapMarker
                 :key="index"
                 :position="{lat:this.latitude, lng:this.longitude}"
                 :clickable="true"
                 :draggable="true"
-              />
+                />
             </GmapMap>
-        </div>
-          </b-col>
-           <b-col :cols="4">
-             <div class="ml-4">
-              <div style="padding-left: 160px; width: 88%;">
-             <div style="padding-top:1px; padding-bottom:1px; font-size: 18px; font-weight: 200;" >
-             <img src='/static/icons8-train-64.png' height="20" width="20"/>
-              Stations Nearby 
-             </div>
-
-           <div v-if="stations.length > 0">
-            <resource-list
-            :items="stations">
-           </resource-list>
-           </div>
-
-         <div v-else>
-           <b-card>
-           <div style="padding-top:1px;font-size: 14px; font-weight: 200;">
-               <center><b> No Stations Found! </b> </center>
           </div>
-          <div style="padding-top:1px;font-size: 12px; font-weight: 200;">
-               <center> Please type in a valid address. </center>
-             </div>
-           </b-card>
-        </div>
-
-           </div>
-           </div>
-          </b-col>
           
-          </b-row>
-          <div class="pt-2 pl-3">
-           <b-card class="mb-2" style="width:96%; height:200%;" title="Frequency of Crimes">
-             <b-col :cols="24">  
-              <div style="padding-bottom:10px; width:100%;">
-                <div>
-                  <div v-if="crimeTypes.length > 0">
-                    <b-table striped hover :items="crimeTypes" :fields="fields">
-                       <span slot="Station" slot-scope="data" v-html="data.value"></span>
-                    </b-table>
-                      </div>
-                      <div v-else>
-                        <div style="padding-top:1px;font-size: 14px; font-weight: 200;">
-                              <center><b> No Crimes Found! </b> </center>
-                        </div>
-                          <div style="padding-top:1px;font-size: 12px; font-weight: 200;">
-                              <center> Please type in an address to view crimes. </center>
-                          </div>
-                      </div>
+         </b-col>
+          <b-col :cols="4">
+          <div class="ml-4">
+          <div style="padding-left: 160px; width: 88%;">
+          <div style="padding-top:1px; padding-bottom:1px; font-size: 18px; font-weight: 200;" >
+          <img src='/static/icons8-train-64.png' height="20" width="20"/>
+            Stations Nearby 
+          </div>
+          
+          <div v-if="stations.length > 0">
+            <resource-list
+                :items="stations">
+            </resource-list>
+          </div>
+          <div v-else>
+            <b-card>
+              <div style="padding-top:1px;font-size: 14px; font-weight: 200;">
+              <center><b> No Stations Found! </b> </center>
+              </div>
+
+              <div style="padding-top:1px;font-size: 12px; font-weight: 200;">
+              <center> Please type in a valid address. </center>
+              </div>
+            </b-card>
+          </div>
+          </div>
+          </div>
+          </b-col>
+         </b-row>
+
+         <div class="pt-2 pl-3">
+          <b-card class="mb-2" style="width:96%; height:200%;" title="Frequency of Crimes">
+          <b-col :cols="24">  
+            <div style="padding-bottom:10px; width:100%;">
+              <div>
+                <div v-if="crimeTypes.length > 0">
+                  <b-table striped hover :items="crimeTypes" :fields="fields">
+                  <span slot="Station" slot-scope="data" v-html="data.value"></span>
+                  </b-table>
+                </div>
+                <div v-else>
+                  <div style="padding-top:1px;font-size: 14px; font-weight: 200;">
+                  <center><b> No Crimes Found! </b> </center>
+                  </div>
+
+                  <div style="padding-top:1px;font-size: 12px; font-weight: 200;">
+                  <center> Please type in an address to view crimes. </center>
                   </div>
                 </div>
-             </b-col>
+              </div>
+            </div>
+          </b-col>
           </b-card>
-          </div>
-         </b-card>
-        </b-row>
-</div>
+         </div>
+      </b-card>
+   </b-row>
+   </div>
 </template>
-
 <script>
 /* eslint-disable */
 import api from '@/api/api'
@@ -443,9 +435,9 @@ export default {
 
 <style>
 .navbar-custom {
-    color: #FFFFFF;
-    background-color: #ffc107;
-    height:60px;
+  color: #FFFFFF;
+  background-color: #ffc107;
+  height:60px;
 }
 .navbar-brand
 {

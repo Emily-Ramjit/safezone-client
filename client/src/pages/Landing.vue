@@ -5,8 +5,6 @@
     <b-collapse is-nav id="nav_collapse">
       <b-navbar-nav>
         <b-nav-item href="home">Home</b-nav-item>
-        <!-- <b-nav-item href="recentactivity">Recent Activity</b-nav-item> -->
-        <!-- <b-nav-item href="routes">Routes</b-nav-item> -->
       </b-navbar-nav>
     </b-collapse>
   </b-navbar>
@@ -17,20 +15,9 @@
       <template slot="lead">Getting you home on your own</template>
   </b-jumbotron>
 </div>
-
-    <!-- <input ref="autocomplete"
-        placeholder="Search by address..."
-        class="search-location"
-        onfocus="value = ''"
-        v-model="searchValue"
-        @keydown.enter.native="handleClick(searchValue)"
-        type="text" /> -->
-
-        <b-form-input class="search-location" ref="autocomplete" type="text" v-model="searchValue"  
-        :placeholder="'Search by address...'" @keydown.enter.native="handleClick(searchValue)" >
-        </b-form-input>
-
-
+    <b-form-input class="search-location" ref="autocomplete" type="text" v-model="searchValue"  
+    :placeholder="'Search by address...'" @keydown.enter.native="handleClick(searchValue)" >
+    </b-form-input>
 </div>
 </template>
 

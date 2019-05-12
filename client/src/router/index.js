@@ -2,7 +2,6 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Home from '@/pages/Home'
 import Landing from '../pages/Landing'
-import Statistics from '../pages/Statistics'
 import RecentActivity from '../pages/RecentActivity'
 import Routes from '../pages/Routes'
 
@@ -35,11 +34,6 @@ export default new Router({
       name: 'landing',
       component: Landing,
       props: { domain: getUrlSubdomain(window.location.origin) }
-    },
-    {
-      path: '/statistics',
-      name: 'statistics',
-      component: Statistics
     },
     {
       path: '/recentactivity/:station/:latitude/:longitude',

@@ -18,7 +18,7 @@
                 <b-table striped hover :items="items" :fields="fields" />
               </div>
             </div>
-        </b-col>
+          </b-col>
          </b-card>
         </b-row>
         </div>
@@ -59,15 +59,6 @@ export default {
         { Category: 'Murder', Number_of_Occurences: 1, Date: '3/20/2019' },
         { Category: 'Robbery', Number_of_Occurences: 3, Date: '3/20/2019' }
       ],
-      sections: [
-        {
-          title: 'Recent Activity',
-          items: [
-            {content: 'Home', url: '/home'},
-            {content: 'Routes', url: '/routes'}
-          ]
-        }
-      ],
       page: {
         subTitle: this.$route.params.station
       },
@@ -97,7 +88,6 @@ export default {
       console.log(params)
       api.getNearbyCrimes(params)
         .then(res => {
-          console.log(res.data)
           this.items = res.data.results.map(crime => {
             return {
                Category: crime.category, 
@@ -108,7 +98,6 @@ export default {
         })
     },
     updateFrequency ($event) {
-      console.log($event)
       this.selected = $event
       this.getCrimes()
     }
