@@ -151,7 +151,10 @@ import api from '@/api/api'
 
 export default {
   mounted () {
+    // initialize address
     this.$router.push({address: ''})
+
+    // on page reload, fetch data necessary to populate fields
     this.fetch()
   },
   data () {
@@ -239,29 +242,36 @@ export default {
     fetch () {
       this.inputAddress = this.$route.params.address
       if (this.inputAddress !== null || this.inputAddress !== undefined) {
+        // set coordinates for address user inputted
         this.getCoordinatesByAddress(this.inputAddress)
       } else {
+        // set default address to Hunter College if address not specified
         this.getCoordinatesByAddress('695 Park Ave, New York, NY 10065')
       }
     },
     getStations () {
+      // set parameters for request to getNearbyStations endpoint
       var params = {
         latitude: this.latitude,
         longitude: this.longitude,
         API_KEY: ''
       }
+      // asynchronous call to api server endpoint
       api.getNearbyStations(params)
         .then(res => {  
           console.log(res.data)
+          // map stations to response data
           this.stations = res.data.map(station => {
             var lines = ''
             var icons = ''
+            // set and map MTA icons to station lines
             for(var i = 0; i < station.lines.length; i++) {
               icons = icons + this.setIcons(station.lines[i])
               lines = lines + station.lines[i] + "," 
             }
             station.lines = lines
             station.icons = icons
+            // returns station object
             return {
                line: station.lines,
                icon: station.icons,
@@ -272,49 +282,57 @@ export default {
             }
           })
         }).then(res => {
+          // set crime data
           this.getCrimes()
         })
         .catch(err => {
           console.log(err)
         })
     },
+    // set parameters for request to getCoordinates endpoint
     getCoordinatesByAddress (addr) {
       var params = {
         address: addr,
         key: ''
       }
+      // asynchronous call to api server endpoint
       api.getCoordinatesByAddress(params)
         .then(res => {
-          console.log(res)
+          // map longitude and latitude to response data
           this.longitude = res.data.results[0].geometry.location.lng
           this.latitude = res.data.results[0].geometry.location.lat
-          console.log(this.longitude, this.latitude)
         }).then(res => {
           this.getStations()
         })
     },
+    // function to get alls for each station
     getCrimes() {
       this.totalCrimes = 0
       this.maxCrimes = 0
       this.crimeTypes = []
       this.stations.forEach(station => {
+      // set parameters for request to getNearbyCrimes endpoint
         var params = {
           latitude: station.latitude,
           longitude: station.longitude,
           API_KEY: '',
           timeSpan: 'year'
         }
+        // asynchronous call to api server endpoint
         api.getNearbyCrimes(params)
           .then(res => {
-            console.log(res.data.results)
+            // set and map total crimes
             this.totalCrimes = this.totalCrimes + res.data.results.length;
+            // get/set max crimes and highest crime station
             if(res.data.results.length > this.maxCrimes) {
               this.maxCrimes = res.data.results.length
               this.highestCrimeStation = station.icon + ' ' + station.stop
             }
+            // Add new field 'Station' for frequency of crimes table
             var field = {
               Station: station.icon + station.stop
             }
+            // create new array necessary for frequency of crimes table
             var result = res.data.frequencies
             var array = []
             array.push(result)
@@ -322,17 +340,19 @@ export default {
             var newArray = this.appendObjTo(array, field);
             newArray[0].Station = newArray[1].Station
             this.crimeTypes.push(newArray[0])
-            console.log(this.crimeTypes)
           })
       })
     },
+   // Helper function to add object to array
    appendObjTo(thatArray, newObj) {
       var frozenObj = Object.freeze(newObj);
       return Object.freeze(thatArray.concat(frozenObj));
    },
+   // Function to redirect to routes page
    routeTo() {
      this.$router.push({name: 'routes'})
    },
+   // Helper function to set icons for each station
    setIcons(line) {
      switch(line) { 
         case "1": { 

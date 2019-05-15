@@ -30,12 +30,14 @@ import api from '@/api/api'
 
 export default {
   mounted () {
-    console.log(this.$route.params.station )
+    // initial page set up
     this.page.subTitle = this.$route.params.station 
+    // fetch data to populate fields
     this.fetch()
   },
   data () {
     return {
+      // default fields, timeframes, and items for crime table
       fields: {
         Category: {
           key: 'Category',
@@ -76,18 +78,21 @@ export default {
   },
   methods: {
     fetch () {
+      // get crime data
       this.getCrimes()
     },
     getCrimes () {
+      // set parameters for request to getCrimes endpoint
       var params = {
         latitude: this.$route.params.latitude,
         longitude: this.$route.params.longitude,
         API_KEY: '',
         timeSpan: this.selected
       }
-      console.log(params)
+      // asynchronous call to api server endpoint
       api.getNearbyCrimes(params)
         .then(res => {
+          // map items for table from response data
           this.items = res.data.results.map(crime => {
             return {
                Category: crime.category, 
@@ -97,6 +102,7 @@ export default {
           })
         })
     },
+    // handles frequency changes, based on event
     updateFrequency ($event) {
       this.selected = $event
       this.getCrimes()

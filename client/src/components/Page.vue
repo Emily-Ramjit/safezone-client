@@ -10,7 +10,7 @@
 
 <script>
 export default {
-  name: 'BC-page',
+  name: 'page',
 
   props: {
     fullWidth: {

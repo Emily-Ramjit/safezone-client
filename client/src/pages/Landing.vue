@@ -87,6 +87,7 @@
 <script>
 export default {
   mounted () {
+    // inital setup for autocomplete feature
     this.autocomplete = new google.maps.places.Autocomplete(
       (this.$refs.autocomplete),
       {types: ['geocode']}
@@ -98,8 +99,8 @@ export default {
     }
   },
   methods: {
+    // Redirect to home/stats page on search
     handleClick(search) {
-      console.log(search)
       this.$router.push({name: 'home', params: { address: search}});
     }
   }

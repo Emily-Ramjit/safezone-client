@@ -119,24 +119,30 @@
 import api from '@/api/api'
 export default {
   mounted () {
+    // fetch data for routes 
     this.fetch()
   },
   data () {
     return {
+      // default/initial values for address/route information
       isLoaded: false,
       originAddress: '',
       destinationAddress: '',
 
       originLatitude: 0,
       originLongitude: 0,
+
       destinationLatitude: 40.7618356,
       destinationLongitude: -73.9821805,
+
       allRoutes: [],
       zoom: 16
     }
   },
   methods: {
+    // function to get coordinates 
     getCoordinatesByAddress(origin, destination) {
+      // set parameters for request to getCoordinates endpoint
       var originParams = {
         address: origin,
         key: ''
@@ -145,23 +151,32 @@ export default {
         address: destination,
         key: ''
       }
+       // asynchronous call to api server endpoint
       api.getCoordinatesByAddress(originParams)
         .then(res => {
+          // map origin latitude and longitude from response data
           this.originLongitude = res.data.results[0].geometry.location.lng
           this.originLatitude = res.data.results[0].geometry.location.lat
         }).then(res => {
+           // asynchronous call to api server endpoint
           api.getCoordinatesByAddress(destinationParams)
         .then(res => {
+          // map destination latitude and longitude from response data
           this.destinationLongitude = res.data.results[0].geometry.location.lng
           this.destinationLatitude = res.data.results[0].geometry.location.lat
         }).then(res => {
-         this.zoom = 14
-         this.getRoutes()
+          // reformat google maps
+          this.zoom = 14
+          // get routes
+          this.getRoutes()
          })
        })
     },
+    // function to get routes
     getRoutes() {
+      // initialize allRoutes array
       this.allRoutes = []
+       // set parameters for request to getRoutes endpoint
       var params = {
         origin_latitude: this.originLatitude,
         origin_longitude: this.originLongitude,
@@ -169,10 +184,13 @@ export default {
         dest_longitude: this.destinationLongitude,
         key: ''
       }
+       // asynchronous call to api server endpoint
       api.getRoutes(params)
         .then(res => {
+          // map allRoutes to response data
           this.allRoutes = res.data
         }).then(res => {
+          // set isLoaded to true so that page can populate all data
          this.isLoaded = true
         })
     }

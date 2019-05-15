@@ -10,9 +10,9 @@
       <div style="padding-left:5px font-size: 10px; font-weight: 200;">
           <span v-html="item.icon"/> 
                 {{item.stop}} 
-             </span>
+          </span>
           <hr/>
-       Percentile: {{item.percentile}}
+         Percentile: {{item.percentile}}
       </div>
        
   </b-row>
